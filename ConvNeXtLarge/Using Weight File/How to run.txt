@@ -1,0 +1,28 @@
+ConvNeXtLarge — Using Weight File
+=================================
+
+Prerequisites
+-------------
+pip install tensorflow scikit-learn matplotlib
+Requires TensorFlow >= 2.11 for ConvNeXt Keras applications.
+
+1. LOAD PRETRAINED  (ImageNet weights, predict only)
+   python load_pretrained.py path/to/image.jpg
+
+2. FEATURE EXTRACTION  (Phase 1: frozen base, new head)
+   Prepare dataset/train and dataset/val directories.
+   python feature_extraction.py
+   Output: convnext_large_fe_best.keras
+
+3. FINE-TUNING  (Phase 1 + Phase 2: progressive unfreeze)
+   Prepare dataset/train and dataset/val directories.
+   python fine_tuning.py
+   Output: convnext_large_fine_tuned_best.keras
+
+Notes
+-----
+- ConvNeXt preprocessing: preprocess_input from
+  tensorflow.keras.applications.convnext
+  (normalises with ImageNet channel mean and std).
+- Phase 2 unfreezes the last 40% of base layers at lr=1e-5.
+- Saved models use .keras format (TF SavedModel-compatible).

@@ -1,0 +1,18 @@
+EfficientNetV2L — Using Pre-trained Weights
+=============================================
+Preprocessing: preprocess_input  ->  [-1, 1]  (x / 127.5 - 1.0)
+  from tensorflow.keras.applications.efficientnet_v2 import preprocess_input
+
+1. Feature Extraction:  python feature_extraction.py   (1280-d vectors)
+2. Transfer Learning:   python load_pretrained.py       (head only, lr=1e-3)
+3. Fine-Tuning:         python fine_tuning.py
+   Phase 1 (10 ep): head only, lr=1e-3
+   Phase 2 (20 ep): last 30% of backbone unfrozen, lr=1e-5
+   Saved: efficientnetv2l_ft_best.keras
+
+Notes:
+  - Input: 480x480, batch_size=4 (reduce to 2 if OOM — ~119M params)
+  - NEVER mix preprocess_input with rescale=1./255
+  - V2L uses 30% unfreeze (not 40%) due to deeper stage 5 (25 blocks)
+  - Gradient accumulation or mixed precision may help with memory:
+      tf.keras.mixed_precision.set_global_policy("mixed_float16")

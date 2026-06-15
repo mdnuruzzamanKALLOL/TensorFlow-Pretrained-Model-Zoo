@@ -1,0 +1,11 @@
+EfficientNetV2S — Python Scripts
+==================================
+1. Prepare dataset:  dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. Train:            python train.py
+3. Inference:        python inference.py path/to/image.jpg
+
+Notes:
+  - Input: 300x300, batch_size=16
+  - Preprocessing: rescale=1./255 (from scratch)
+  - Activation: SiLU/Swish throughout
+  - Stages 0-2 use Fused-MBConv; stages 3-5 use MBConv with SE (ratio=0.25)

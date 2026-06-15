@@ -1,0 +1,45 @@
+VGG16 — Python Scripts (TensorFlow / Keras)
+============================================
+
+Files
+-----
+  vgg16.py     — build_vgg16() architecture from scratch (5 conv blocks + FC head)
+  train.py     — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves vgg16_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture
+------------
+  Block 1 : Conv(64)  x2 + MaxPool  ->  64 x 112x112
+  Block 2 : Conv(128) x2 + MaxPool  -> 128 x  56x56
+  Block 3 : Conv(256) x3 + MaxPool  -> 256 x  28x28
+  Block 4 : Conv(512) x3 + MaxPool  -> 512 x  14x14
+  Block 5 : Conv(512) x3 + MaxPool  -> 512 x   7x7
+  Head    : Flatten(25088) -> Dense(4096) -> Dense(4096) -> Dense(classes)
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~138M
+  Batch size  : 32
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

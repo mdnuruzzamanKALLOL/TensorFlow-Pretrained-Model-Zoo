@@ -1,0 +1,45 @@
+VGG19 — Python Scripts (TensorFlow / Keras)
+============================================
+
+Files
+-----
+  vgg19.py     — build_vgg19() architecture from scratch (5 conv blocks + FC head)
+  train.py     — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves vgg19_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture (VGG19 vs VGG16)
+------------------------------
+  Block 1 : Conv(64)  x2 + MaxPool  ->  64 x 112x112   [same as VGG16]
+  Block 2 : Conv(128) x2 + MaxPool  -> 128 x  56x56    [same as VGG16]
+  Block 3 : Conv(256) x4 + MaxPool  -> 256 x  28x28    [VGG16 has x3]
+  Block 4 : Conv(512) x4 + MaxPool  -> 512 x  14x14    [VGG16 has x3]
+  Block 5 : Conv(512) x4 + MaxPool  -> 512 x   7x7     [VGG16 has x3]
+  Head    : Flatten(25088) -> Dense(4096) -> Dense(4096) -> Dense(classes)
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~143.7M
+  Batch size  : 32
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

@@ -1,0 +1,7 @@
+EfficientNetV2B1 — Python Scripts
+===================================
+1. dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. python train.py
+3. python inference.py path/to/image.jpg
+Notes: Input=240x240, batch=32. B1 = B0 with depth ×1.1 (repeats: [2,3,3,4,6,9]).
+Stage-0 n=2: block-0 reduces 32->16, block-1 adds residual 16->16.

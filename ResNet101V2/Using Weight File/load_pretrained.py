@@ -1,0 +1,29 @@
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+
+NUM_CLASSES = 10
+
+# Load ResNet101V2 with ImageNet weights (no top)
+base_model = keras.applications.ResNet101V2(
+    weights='imagenet',
+    include_top=False,
+    input_shape=(224, 224, 3),
+)
+
+# Add custom classification head
+x       = base_model.output
+x       = layers.GlobalAveragePooling2D()(x)
+x       = layers.Dropout(0.3)(x)
+outputs = layers.Dense(NUM_CLASSES, activation='softmax')(x)
+model   = keras.Model(inputs=base_model.input, outputs=outputs, name='resnet101v2_transfer')
+
+model.summary()
+
+# Test forward pass with correct ResNet101V2 preprocessing: x/127.5 - 1.0  -> [-1, 1]
+dummy = tf.random.normal((1, 224, 224, 3)) * 127.5 + 127.5   # simulate [0, 255] pixel values
+dummy = keras.applications.resnet_v2.preprocess_input(dummy)  # -> [-1, 1]
+out   = model(dummy, training=False)
+print(f'Output shape : {out.shape}')
+print(f'Total params : {model.count_params():,}')

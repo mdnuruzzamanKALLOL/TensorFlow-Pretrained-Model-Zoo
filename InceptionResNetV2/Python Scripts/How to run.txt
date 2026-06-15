@@ -1,0 +1,18 @@
+InceptionResNetV2 — Python Scripts
+====================================
+
+1. Prepare dataset
+   dataset/
+     train/<class_name>/*.jpg
+     val/<class_name>/*.jpg
+
+2. Train from scratch
+   python train.py
+
+3. Run inference
+   python inference.py path/to/image.jpg
+
+Notes:
+  - Input size: 299x299, use batch_size=16 (large model: ~55.8M params)
+  - Preprocessing: rescale=1./255 for from-scratch training
+  - Best model auto-saved to inceptionresnetv2_best.keras

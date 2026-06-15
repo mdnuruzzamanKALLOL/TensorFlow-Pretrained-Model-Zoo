@@ -1,0 +1,21 @@
+DenseNet121 — Python Scripts
+============================
+
+1. ARCHITECTURE ONLY
+   python DenseNet121.py
+
+2. TRAINING FROM SCRATCH
+   Prepare your dataset:
+     dataset/
+       train/  class_a/  class_b/ ...
+       val/    class_a/  class_b/ ...
+
+   python train.py
+
+   Outputs:
+     densenet121_best.keras    (best val_accuracy checkpoint)
+     densenet121_final.keras   (final epoch weights)
+
+3. INFERENCE
+   Edit CLASS_NAMES in inference.py, then:
+   python inference.py path/to/image.jpg

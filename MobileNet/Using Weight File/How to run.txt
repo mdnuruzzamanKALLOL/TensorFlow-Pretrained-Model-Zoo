@@ -1,0 +1,57 @@
+MobileNet — Using Pretrained Weight Files (TensorFlow / Keras)
+===============================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, GAP + Dropout(0.3) + Dense
+  feature_extraction.py — frozen backbone, head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) + Phase 2 (DW blocks 11-13, lr=1e-5)
+
+Preprocessing
+-------------
+  MobileNet uses tf-mode preprocessing:
+    keras.applications.mobilenet.preprocess_input(img)
+    -> img / 127.5 - 1.0  ->  range [-1, 1]
+    -> do NOT divide by 255 before calling this function
+
+  Import: from tensorflow.keras.applications.mobilenet import preprocess_input
+
+Head to replace
+---------------
+  base_model = keras.applications.MobileNet(weights='imagenet',
+                 include_top=False, input_shape=(224, 224, 3))
+  x       = GlobalAveragePooling2D()(base_model.output)
+  x       = Dropout(0.3)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.MobileNet(weights='imagenet')
+  Top-1    : ~70.6%  (ImageNet)
+  Downloaded automatically on first use (~17 MB)
+
+Fine-tuning strategy
+--------------------
+  MobileNet layer names are descriptive (conv_dw_N, conv_pw_N), so
+  name-based unfreezing is clean and precise:
+
+  Phase 1 : Freeze full backbone, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze DW blocks 11, 12, 13 only (Adam 1e-5, 20 epochs)
+
+  Code:
+    for layer in base_model.layers:
+        layer.trainable = any(
+            layer.name.startswith(f'conv_dw_{i}') or
+            layer.name.startswith(f'conv_pw_{i}')
+            for i in [11, 12, 13]
+        )
+
+  These are the last 3 depthwise separable blocks (1024-ch features at 7x7).
+  Saved: mobilenet_ft.keras
+
+MobileNet layer naming
+-----------------------
+  conv1, conv1_bn, conv1_relu           — stem
+  conv_dw_1..13, conv_pw_1..13          — 13 DW-Sep blocks
+  Each block: conv_dw_N_bn, conv_dw_N_relu, conv_pw_N_bn, conv_pw_N_relu

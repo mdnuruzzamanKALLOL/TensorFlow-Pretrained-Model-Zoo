@@ -1,0 +1,56 @@
+MobileNet — Python Scripts (TensorFlow / Keras)
+================================================
+
+Files
+-----
+  mobilenet.py — build_mobilenet() from scratch (13 DW-Sep blocks)
+  train.py     — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/  train/  class_a/ ...   val/  class_a/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py   ->  mobilenet_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture
+------------
+  Stem       : Conv3x3/2 (32 ch) + BN + ReLU6  -> 112x112
+  DW Block 1 : DWSep(64,  s=1)                 -> 112x112
+  DW Block 2 : DWSep(128, s=2)                 ->  56x56
+  DW Block 3 : DWSep(128, s=1)                 ->  56x56
+  DW Block 4 : DWSep(256, s=2)                 ->  28x28
+  DW Block 5 : DWSep(256, s=1)                 ->  28x28
+  DW Block 6 : DWSep(512, s=2)                 ->  14x14
+  DW Blocks 7-11: DWSep(512, s=1) x5           ->  14x14
+  DW Block 12: DWSep(1024, s=2)                ->   7x7
+  DW Block 13: DWSep(1024, s=1)                ->   7x7
+  GlobalAvgPool -> Dense(num_classes, softmax)
+
+  Depthwise Separable Conv block:
+    DepthwiseConv3x3(stride) + BN + ReLU6
+    Conv1x1(filters)         + BN + ReLU6
+    ~8-9x fewer params than equivalent standard conv
+
+  Width multiplier alpha (default=1.0):
+    Scales all filter counts: int(filters * alpha)
+    alpha=0.75 -> ~2.6M params  |  alpha=0.5 -> ~1.3M params
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~4.2M (alpha=1.0)
+  Batch size  : 32
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

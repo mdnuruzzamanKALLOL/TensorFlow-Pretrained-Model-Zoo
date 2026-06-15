@@ -1,0 +1,13 @@
+EfficientNetV2L — Python Scripts
+==================================
+1. Prepare dataset:  dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. Train:            python train.py
+3. Inference:        python inference.py path/to/image.jpg
+
+Notes:
+  - Input: 480x480, batch_size=4 (reduce to 2 if OOM — large model, ~119M params)
+  - Preprocessing: rescale=1./255 (from scratch)
+  - Activation: SiLU/Swish throughout
+  - Stem uses 32 filters (vs 24 in V2S/V2M)
+  - Stages 0-2 use Fused-MBConv; stages 3-6 use MBConv with SE (ratio=0.25)
+  - Stage 5 has 25 MBConv blocks (deepest stage in the family)

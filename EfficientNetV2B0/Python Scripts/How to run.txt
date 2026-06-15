@@ -1,0 +1,7 @@
+EfficientNetV2B0 — Python Scripts
+===================================
+1. dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. python train.py
+3. python inference.py path/to/image.jpg
+Notes: Input=224x224, batch=32. Stages 0-2: Fused-MBConv. Stages 3-5: MBConv+SE(0.25). SiLU activation.
+Stage-0 block-0 reduces stem output 32ch -> 16ch (no residual); subsequent blocks within stages add residuals.

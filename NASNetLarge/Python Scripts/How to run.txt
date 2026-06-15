@@ -1,0 +1,58 @@
+NASNetLarge — Python Scripts (TensorFlow / Keras)
+==================================================
+
+Files
+-----
+  nasnetlarge.py — build_nasnetlarge() from scratch
+                   (same NAS cells as NASNetMobile, larger hyper-parameters)
+  train.py       — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py   — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves nasnetlarge_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture overview
+---------------------
+  Stem    : Conv3x3/2 (96 filters, padding=valid)
+  Stem    : 2x Reduction Cells (filters*4=672, filters*2=336)
+  Group 1 : 6 Normal Cells (filters=168)     -> 1008 ch
+  Reduction Cell (336 filters, skip_red=True)
+  Group 2 : 6 Normal Cells (filters*2=336)   -> 2016 ch
+  Reduction Cell (672 filters, skip_red=True)
+  Group 3 : 6 Normal Cells (filters*4=672)   -> 4032 ch
+  ReLU -> GlobalAvgPool -> Dense(num_classes)
+
+  skip_reduction=True (NASNetLarge vs NASNetMobile):
+    After each explicit reduction cell, the skip connection p retains its
+    pre-reduction value instead of being updated to the reduction's input.
+    This allows normal cells in the next group to skip over the reduction
+    cell entirely, providing richer spatial features via the skip path.
+
+  vs NASNetMobile:
+    Mobile: filters=44,  num_blocks=4, stem=32,  skip_red=False, input=224x224
+    Large : filters=168, num_blocks=6, stem=96,  skip_red=True,  input=331x331
+
+Config
+------
+  Input size  : 331x331  (NASNetLarge standard — do NOT use 224x224)
+  Parameters  : ~88.9M
+  Batch size  : 8  (high memory — reduce further if OOM)
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

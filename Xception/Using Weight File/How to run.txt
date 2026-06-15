@@ -1,0 +1,37 @@
+Xception — Using Pretrained Weight Files (TensorFlow / Keras)
+==============================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, add GAP + Dense head
+  feature_extraction.py — freeze backbone, train head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) then Phase 2 (unfrozen, lr=1e-5)
+
+Preprocessing (important!)
+--------------------------
+  Pretrained Xception requires:
+    keras.applications.xception.preprocess_input(img)  →  scales to [-1, 1]
+
+  All pretrained scripts use this automatically via ImageDataGenerator
+  preprocessing_function= parameter.
+
+Head to replace
+---------------
+  base_model = keras.applications.Xception(weights='imagenet', include_top=False)
+  x = GlobalAveragePooling2D()(base_model.output)
+  x = Dropout(0.2)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.Xception(weights='imagenet')
+  Top-1    : ~79.0%  (ImageNet)
+  Input    : 299x299x3
+  Downloaded automatically on first use (~88 MB)
+
+Fine-tuning phases
+------------------
+  Phase 1 : Freeze base_model entirely, train new head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze base_model (freeze first 100 layers), Adam 1e-5, 20 epochs
+  Saved   : xception_ft.keras

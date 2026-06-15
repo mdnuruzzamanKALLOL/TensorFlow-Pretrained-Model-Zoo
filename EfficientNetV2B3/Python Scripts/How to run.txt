@@ -1,0 +1,9 @@
+EfficientNetV2B3 — Python Scripts
+===================================
+1. dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. python train.py
+3. python inference.py path/to/image.jpg
+Notes: Input=300x300, batch=16, dropout=0.3.
+B3 = B0 with width×1.2 + depth×1.4. Stem widened to 40 filters.
+Filter changes: 16->24, 32->40, 48->56, 96->112, 112->136, 192->232.
+Depth repeats: [2,3,3,5,7,12] (total 32 blocks vs B0's 21).

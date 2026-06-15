@@ -1,0 +1,24 @@
+InceptionResNetV2 — Using Pre-trained Weights
+===============================================
+
+Preprocessing (tf mode): preprocess_input scales pixels to [-1, 1]
+  from tensorflow.keras.applications.inception_resnet_v2 import preprocess_input
+
+1. Feature Extraction (frozen backbone)
+   python feature_extraction.py
+   Output: 1536-d feature vectors (after conv_7b projection)
+
+2. Transfer Learning (head only)
+   python load_pretrained.py
+
+3. Fine-Tuning (two-phase)
+   python fine_tuning.py
+   Phase 1 (10 epochs): head only, lr=1e-3
+   Phase 2 (20 epochs): unfreeze after mixed_7a (all block8 + conv_7b), lr=1e-5
+   Best model saved to irv2_ft_best.keras
+
+Notes:
+  - Input size: 299x299 — use batch_size=16 (model has ~55.8M params)
+  - preprocess_input maps [0,255] -> [-1, 1]  (NOT rescale=1./255)
+  - Residual scaling (0.17/0.1/0.2) prevents training instability
+  - fine_tuning.py uses initial_epoch= for continuous LR tracking

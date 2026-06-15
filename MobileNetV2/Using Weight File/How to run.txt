@@ -1,0 +1,69 @@
+MobileNetV2 — Using Pretrained Weight Files (TensorFlow / Keras)
+=================================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, GAP + Dropout(0.3) + Dense
+  feature_extraction.py — frozen backbone, head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) + Phase 2 (block_13-16 + Conv_1, lr=1e-5)
+
+Preprocessing
+-------------
+  MobileNetV2 uses tf-mode preprocessing (same range as MobileNetV1):
+    keras.applications.mobilenet_v2.preprocess_input(img)
+    -> img / 127.5 - 1.0  ->  range [-1, 1]
+
+  Note: different import from V1:
+    V1:  from tensorflow.keras.applications.mobilenet    import preprocess_input
+    V2:  from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+
+Head to replace
+---------------
+  base_model = keras.applications.MobileNetV2(weights='imagenet',
+                 include_top=False, input_shape=(224, 224, 3))
+  x       = GlobalAveragePooling2D()(base_model.output)  # 1280-dim (from Conv_1)
+  x       = Dropout(0.3)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.MobileNetV2(weights='imagenet')
+  Top-1    : ~71.3%  (ImageNet)
+  Downloaded automatically on first use (~14 MB)
+
+Fine-tuning strategy
+--------------------
+  MobileNetV2 layer names follow block_N_expand/depthwise/project pattern,
+  enabling precise name-based unfreezing:
+
+  Phase 1 : Freeze full backbone, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze block_13, block_14, block_15, block_16 and Conv_1
+            (Adam 1e-5, 20 epochs)
+
+  Code:
+    for layer in base_model.layers:
+        layer.trainable = any(
+            layer.name.startswith(p)
+            for p in ['block_13', 'block_14', 'block_15', 'block_16', 'Conv_1']
+        )
+
+  block_13..15: last stride-2 group (160 ch, 7x7 features)
+  block_16    : final 320-ch bottleneck (stride=1)
+  Conv_1      : the 1280-ch expansion conv before GAP
+  Saved: mobilenetv2_ft.keras
+
+MobileNetV2 layer naming
+--------------------------
+  Conv1, bn_Conv1, Conv1_relu       — stem
+  expanded_conv_*                   — first block (t=1, no expand)
+  block_1_expand/depthwise/project  — blocks 1-16
+  ...
+  block_16_expand/depthwise/project
+  Conv_1, Conv_1_bn, out_relu       — 1280-ch head conv
+
+Preprocessing comparison
+--------------------------
+  MobileNetV1 : mobilenet.preprocess_input    -> x/127.5 - 1.0 -> [-1, 1]
+  MobileNetV2 : mobilenet_v2.preprocess_input -> x/127.5 - 1.0 -> [-1, 1]
+  (same formula, different import path)

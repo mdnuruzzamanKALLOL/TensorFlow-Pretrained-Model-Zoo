@@ -1,0 +1,12 @@
+EfficientNetV2M — Python Scripts
+==================================
+1. Prepare dataset:  dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. Train:            python train.py
+3. Inference:        python inference.py path/to/image.jpg
+
+Notes:
+  - Input: 384x384, batch_size=8 (reduce to 4 if OOM)
+  - Preprocessing: rescale=1./255 (from scratch)
+  - Activation: SiLU/Swish throughout
+  - Stages 0-2 use Fused-MBConv; stages 3-6 use MBConv with SE (ratio=0.25)
+  - Adds 7th stage vs V2S: 5 x MBConv(512) at stride=1

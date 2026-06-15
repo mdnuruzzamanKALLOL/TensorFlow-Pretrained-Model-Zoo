@@ -1,0 +1,56 @@
+MobileNetV2 — Python Scripts (TensorFlow / Keras)
+==================================================
+
+Files
+-----
+  mobilenetv2.py — build_mobilenetv2() from scratch (17 Inverted Residual blocks)
+  train.py       — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py   — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/  train/  class_a/ ...   val/  class_a/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py   ->  mobilenetv2_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture
+------------
+  Stem: Conv3x3/2 (32 ch) + BN + ReLU6              -> 112x112x32
+  expanded_conv: t=1, c=16,  n=1, s=1               -> 112x112x16
+  block_1..2:   t=6, c=24,  n=2, s=2                ->  56x56x24
+  block_3..5:   t=6, c=32,  n=3, s=2                ->  28x28x32
+  block_6..9:   t=6, c=64,  n=4, s=2                ->  14x14x64
+  block_10..12: t=6, c=96,  n=3, s=1                ->  14x14x96
+  block_13..15: t=6, c=160, n=3, s=2                ->   7x7x160
+  block_16:     t=6, c=320, n=1, s=1                ->   7x7x320
+  Conv1x1(1280) + BN + ReLU6                        ->   7x7x1280
+  GlobalAvgPool -> Dense(num_classes, softmax)
+
+  Inverted Residual Block (t=expand_ratio, s=stride):
+    [Expand:  Conv1x1(in*t)  + BN + ReLU6]  (skipped when t=1)
+    DWConv3x3(stride)        + BN + ReLU6
+    Project:  Conv1x1(out)   + BN          (NO activation - linear bottleneck)
+    Add(shortcut) if stride=1 and in_channels == out_channels
+
+  vs MobileNetV1:
+    V1: DWConv + PWConv (no residual, no expand)
+    V2: Expand + DWConv + Linear Project (residual when dims match)
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~3.5M
+  Batch size  : 32
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

@@ -1,0 +1,23 @@
+EfficientNetB0 — Python Scripts
+===============================
+
+1. ARCHITECTURE ONLY
+   python EfficientNetB0.py
+
+2. TRAINING FROM SCRATCH
+   Prepare your dataset:
+     dataset/
+       train/  class_a/  class_b/ ...
+       val/    class_a/  class_b/ ...
+
+   python train.py
+
+   Outputs:
+     efficientnet_b0_best.keras    (best val_accuracy checkpoint)
+     efficientnet_b0_final.keras   (final epoch weights)
+
+3. INFERENCE
+   Edit CLASS_NAMES in inference.py, then:
+   python inference.py path/to/image.jpg
+
+Note: Input images are resized to 224x224 internally.

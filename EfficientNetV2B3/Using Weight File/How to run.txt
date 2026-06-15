@@ -1,0 +1,11 @@
+EfficientNetV2B3 — Using Pre-trained Weights
+=============================================
+Preprocessing: preprocess_input -> [-1,1]
+  from tensorflow.keras.applications.efficientnet_v2 import preprocess_input
+1. Feature Extraction:  python feature_extraction.py   (1280-d)
+2. Transfer Learning:   python load_pretrained.py
+3. Fine-Tuning:         python fine_tuning.py
+   Phase 1 (10 ep): head only, lr=1e-3
+   Phase 2 (20 ep): last 40% unfrozen, lr=1e-5
+Notes: Input=300x300, batch=16, dropout=0.3. Largest B-variant (~14.4M params).
+Stage-5 has 12 MBConv blocks — deepest stage in the B-series.

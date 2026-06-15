@@ -1,0 +1,48 @@
+ResNet50 — Using Pretrained Weight Files (TensorFlow / Keras)
+==============================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, add GAP + Dropout + Dense head
+  feature_extraction.py — freeze full backbone, train head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) then Phase 2 (conv4+conv5, lr=1e-5)
+
+Preprocessing (important!)
+--------------------------
+  ResNet50 preprocessing subtracts the ImageNet channel-wise mean (BGR order):
+    keras.applications.resnet50.preprocess_input(img)
+    -> converts RGB to BGR, subtracts mean [103.939, 116.779, 123.68]
+    -> does NOT divide by 255; input range is approximately [-128, +128]
+
+  All pretrained scripts use this via:
+    ImageDataGenerator(preprocessing_function=preprocess_input)
+
+Head to replace
+---------------
+  base_model = keras.applications.ResNet50(weights='imagenet', include_top=False)
+  x       = GlobalAveragePooling2D()(base_model.output)   # 2048-dim
+  x       = Dropout(0.3)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.ResNet50(weights='imagenet')
+  Top-1    : ~74.9%  (ImageNet)
+  Input    : 224x224x3
+  Downloaded automatically on first use (~98 MB)
+
+Fine-tuning strategy
+--------------------
+  Phase 1 : Freeze full backbone, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze conv4_block* + conv5_block* layers (Adam 1e-5, 20 epochs)
+            Stem + conv2_block* + conv3_block* stay frozen
+  Saved   : resnet50_ft.keras
+
+Layer naming in Keras ResNet50
+------------------------------
+  conv1_*              — stem (7x7 conv)
+  conv2_block1/2/3_*   — stage 1 (3 bottlenecks, 256 ch)
+  conv3_block1/2/3/4_* — stage 2 (4 bottlenecks, 512 ch)
+  conv4_block1..6_*    — stage 3 (6 bottlenecks, 1024 ch)  <- unfrozen in phase 2
+  conv5_block1/2/3_*   — stage 4 (3 bottlenecks, 2048 ch)  <- unfrozen in phase 2

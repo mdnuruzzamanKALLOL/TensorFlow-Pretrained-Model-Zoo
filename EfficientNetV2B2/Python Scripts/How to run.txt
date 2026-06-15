@@ -1,0 +1,7 @@
+EfficientNetV2B2 — Python Scripts
+===================================
+1. dataset/train/<cls>/*.jpg  and  dataset/val/<cls>/*.jpg
+2. python train.py
+3. python inference.py path/to/image.jpg
+Notes: Input=260x260, batch=32, dropout=0.3.
+B2 = B0 with width×1.1 (48->56, 96->104, 112->120, 192->208) + depth×1.2 (repeats: [2,3,3,4,6,10]).

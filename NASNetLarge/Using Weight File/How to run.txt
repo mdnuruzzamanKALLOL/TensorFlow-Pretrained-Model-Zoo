@@ -1,0 +1,66 @@
+NASNetLarge — Using Pretrained Weight Files (TensorFlow / Keras)
+=================================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, add GAP + Dropout(0.5) + Dense head
+  feature_extraction.py — freeze full backbone, train head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) then Phase 2 (last 30% layers, lr=1e-5)
+
+Preprocessing (same as NASNetMobile)
+--------------------------------------
+  NASNetLarge uses tf-mode preprocessing:
+    keras.applications.nasnet.preprocess_input(img)
+    -> img / 127.5 - 1.0  ->  range [-1, 1]
+    -> do NOT divide by 255 before calling this function
+
+  Import: from tensorflow.keras.applications.nasnet import preprocess_input
+  (same import for both NASNetMobile and NASNetLarge)
+
+Input size
+----------
+  NASNetLarge MUST use 331x331 input (not 224x224).
+  The pretrained weights were trained with 331x331.
+  Using a different size will degrade accuracy.
+
+Head to replace
+---------------
+  base_model = keras.applications.NASNetLarge(weights='imagenet', include_top=False,
+                                               input_shape=(331, 331, 3))
+  x       = GlobalAveragePooling2D()(base_model.output)
+  x       = Dropout(0.5)(x)    # higher dropout for large model
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.NASNetLarge(weights='imagenet')
+  Top-1    : ~82.5%  (ImageNet)
+  Input    : 331x331x3
+  Downloaded automatically on first use (~343 MB)
+
+Fine-tuning strategy
+--------------------
+  NASNet layer names are NAS-generated, so index-based unfreezing is recommended:
+
+  Phase 1 : Freeze full backbone, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze last 30% of base_model.layers (Adam 1e-5, 20 epochs)
+
+  Code:
+    freeze_until = int(len(base_model.layers) * 0.70)
+    for i, layer in enumerate(base_model.layers):
+        layer.trainable = (i >= freeze_until)
+
+  The last 30% covers approximately Group 3 (the final 6 Normal Cells).
+  Saved: nasnetlarge_ft.keras
+
+Memory considerations
+---------------------
+  NASNetLarge at 331x331 is very memory-intensive:
+    batch_size=8   — recommended starting point (reduce to 4 if OOM)
+    ~88.9M params — forward + backward pass requires significant VRAM
+
+NASNet family comparison
+------------------------
+  NASNetMobile : 224x224, ~5.3M  params, ~74.4% Top-1, batch=32
+  NASNetLarge  : 331x331, ~88.9M params, ~82.5% Top-1, batch=8

@@ -1,0 +1,22 @@
+InceptionV3 — Using Pre-trained Weights
+========================================
+
+Preprocessing (tf mode): preprocess_input scales pixels to [-1, 1]
+  from tensorflow.keras.applications.inception_v3 import preprocess_input
+
+1. Feature Extraction (frozen backbone)
+   python feature_extraction.py
+
+2. Transfer Learning (head only)
+   python load_pretrained.py
+
+3. Fine-Tuning (two-phase)
+   python fine_tuning.py
+   Phase 1 (10 epochs): head only, lr=1e-3
+   Phase 2 (20 epochs): unfreeze mixed7..mixed10, lr=1e-5
+   Best model saved to inceptionv3_ft_best.keras
+
+Notes:
+  - Input size: 299x299 — use batch_size=16 to avoid OOM
+  - preprocess_input maps [0,255] -> [-1, 1]  (NOT rescale=1./255)
+  - fine_tuning.py uses initial_epoch= for continuous LR tracking

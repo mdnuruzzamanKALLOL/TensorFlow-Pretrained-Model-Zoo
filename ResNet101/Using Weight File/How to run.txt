@@ -1,0 +1,48 @@
+ResNet101 — Using Pretrained Weight Files (TensorFlow / Keras)
+===============================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, add GAP + Dropout + Dense head
+  feature_extraction.py — freeze full backbone, train head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) then Phase 2 (conv4+conv5, lr=1e-5)
+
+Preprocessing (same as ResNet50)
+---------------------------------
+  ResNet101 uses the same caffe-mode preprocessing as ResNet50:
+    keras.applications.resnet.preprocess_input(img)
+    -> converts RGB to BGR, subtracts mean [103.939, 116.779, 123.68]
+    -> does NOT divide by 255; range is approximately [-128, +128]
+
+  Note: import from tensorflow.keras.applications.resnet (not resnet50).
+
+Head to replace
+---------------
+  base_model = keras.applications.ResNet101(weights='imagenet', include_top=False)
+  x       = GlobalAveragePooling2D()(base_model.output)   # 2048-dim
+  x       = Dropout(0.3)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.ResNet101(weights='imagenet')
+  Top-1    : ~76.4%  (ImageNet)
+  Input    : 224x224x3
+  Downloaded automatically on first use (~171 MB)
+
+Fine-tuning strategy
+--------------------
+  Phase 1 : Freeze full backbone, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze conv4_block* + conv5_block* (Adam 1e-5, 20 epochs)
+            Stage 3 has 23 blocks (conv4_block1..conv4_block23)
+            Stem + conv2_block* + conv3_block* stay frozen
+  Saved   : resnet101_ft.keras
+
+Layer naming in Keras ResNet101
+--------------------------------
+  conv1_*                — stem
+  conv2_block1/2/3_*     — stage 1 (3 bottlenecks, 256 ch)
+  conv3_block1/2/3/4_*   — stage 2 (4 bottlenecks, 512 ch)
+  conv4_block1..23_*     — stage 3 (23 bottlenecks, 1024 ch) <- unfrozen
+  conv5_block1/2/3_*     — stage 4 (3 bottlenecks, 2048 ch)  <- unfrozen

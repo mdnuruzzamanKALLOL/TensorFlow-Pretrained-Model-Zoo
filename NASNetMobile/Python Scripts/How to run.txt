@@ -1,0 +1,59 @@
+NASNetMobile — Python Scripts (TensorFlow / Keras)
+===================================================
+
+Files
+-----
+  nasnetmobile.py — build_nasnetmobile() from scratch
+                    (Normal Cells + Reduction Cells, NAS-A ops)
+  train.py        — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py    — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves nasnetmobile_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture overview
+---------------------
+  Stem    : Conv3x3/2 (32 filters, padding=valid)
+  Stem    : 2x Reduction Cells (filters*4=176, filters*2=88)
+  Group 1 : 4 Normal Cells (filters=44)     -> 264 ch
+  Reduction Cell (88 filters, skip_red=False)
+  Group 2 : 4 Normal Cells (filters*2=88)   -> 528 ch
+  Reduction Cell (176 filters, skip_red=False)
+  Group 3 : 4 Normal Cells (filters*4=176)  -> 1056 ch
+  ReLU -> GlobalAvgPool -> Dense(num_classes)
+
+  Normal Cell output  = Concat 6 components, each 'filters' channels
+  Reduction Cell output = Concat 4 components, each 'filters' channels
+
+  NAS Cell operations (Normal Cell):
+    Block 1: sep5x5(h) + identity(h)
+    Block 2: sep5x5(p) + sep3x3(h)
+    Block 3: avg3x3(h) + p
+    Block 4: avg3x3(p) + avg3x3(p)
+    Block 5: max3x3(h) + sep3x3(p)
+    where h = relu(ip)->conv1x1->BN,  p = adjusted previous cell output
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~5.3M
+  Batch size  : 32
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

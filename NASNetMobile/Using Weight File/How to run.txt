@@ -1,0 +1,55 @@
+NASNetMobile — Using Pretrained Weight Files (TensorFlow / Keras)
+==================================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, add GAP + Dropout + Dense head
+  feature_extraction.py — freeze full backbone, train head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) then Phase 2 (last 30% layers, lr=1e-5)
+
+Preprocessing
+-------------
+  NASNetMobile uses tf-mode preprocessing (same as Xception, ResNetV2 family):
+    keras.applications.nasnet.preprocess_input(img)
+    -> img / 127.5 - 1.0  ->  range [-1, 1]
+    -> do NOT divide by 255 before calling this function
+
+  Import: from tensorflow.keras.applications.nasnet import preprocess_input
+
+Head to replace
+---------------
+  base_model = keras.applications.NASNetMobile(weights='imagenet', include_top=False,
+                                                input_shape=(224, 224, 3))
+  x       = GlobalAveragePooling2D()(base_model.output)
+  x       = Dropout(0.3)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+Pretrained weights
+------------------
+  Source   : keras.applications.NASNetMobile(weights='imagenet')
+  Top-1    : ~74.4%  (ImageNet)
+  Input    : 224x224x3
+  Downloaded automatically on first use (~23 MB)
+
+Fine-tuning strategy
+--------------------
+  NASNet layer names are NAS-generated (not conv2/conv3/etc.) so index-based
+  unfreezing is the recommended approach:
+
+  Phase 1 : Freeze full backbone, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze last 30% of base_model.layers (Adam 1e-5, 20 epochs)
+
+  Code:
+    freeze_until = int(len(base_model.layers) * 0.70)
+    for i, layer in enumerate(base_model.layers):
+        layer.trainable = (i >= freeze_until)
+
+  The last 30% corresponds approximately to Group 3 (the final 4 Normal Cells).
+  Saved: nasnetmobile_ft.keras
+
+Preprocessing comparison (NASNet family)
+-----------------------------------------
+  NASNetMobile : nasnet.preprocess_input -> x/127.5 - 1.0 -> [-1, 1]
+  NASNetLarge  : nasnet.preprocess_input -> x/127.5 - 1.0 -> [-1, 1]
+  (same function for both variants)

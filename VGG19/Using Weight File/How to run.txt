@@ -1,0 +1,44 @@
+VGG19 — Using Pretrained Weight Files (TensorFlow / Keras)
+===========================================================
+
+Files
+-----
+  load_pretrained.py    — load ImageNet weights, add GAP + Dense head
+  feature_extraction.py — freeze all conv blocks, train head only (Adam lr=1e-3)
+  fine_tuning.py        — Phase 1 (frozen) then Phase 2 (unfreeze block4+5, lr=1e-5)
+
+Preprocessing (important!)
+--------------------------
+  VGG19 uses the same preprocessing as VGG16 — channel-wise mean subtraction:
+    keras.applications.vgg19.preprocess_input(img)
+    -> subtracts mean [103.939, 116.779, 123.68] (BGR, handled by Keras)
+    -> does NOT divide by 255; input range is approximately [-128, +128]
+
+  All pretrained scripts use this via:
+    ImageDataGenerator(preprocessing_function=preprocess_input)
+
+Head to replace
+---------------
+  base_model = keras.applications.VGG19(weights='imagenet', include_top=False)
+  x       = GlobalAveragePooling2D()(base_model.output)   # 512-dim
+  x       = Dense(512, activation='relu')(x)
+  x       = Dropout(0.5)(x)
+  outputs = Dense(NUM_CLASSES, activation='softmax')(x)
+  model   = keras.Model(base_model.input, outputs)
+
+  Original VGG head (Flatten(25088)->Dense(4096)x2) holds ~102M params alone.
+  GAP + Dense(512) head is far more practical.
+
+Pretrained weights
+------------------
+  Source   : keras.applications.VGG19(weights='imagenet')
+  Top-1    : ~71.1%  (ImageNet)
+  Input    : 224x224x3
+  Downloaded automatically on first use (~549 MB)
+
+Fine-tuning strategy
+--------------------
+  Phase 1 : Freeze all conv blocks, train head (Adam 1e-3, 10 epochs)
+  Phase 2 : Unfreeze block4 + block5 (Adam 1e-5, 20 more epochs)
+            block3 has 4 conv layers in VGG19 — stays frozen with blocks 1-2
+  Saved   : vgg19_ft.keras

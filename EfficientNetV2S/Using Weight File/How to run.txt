@@ -1,0 +1,16 @@
+EfficientNetV2S — Using Pre-trained Weights
+=============================================
+Preprocessing: preprocess_input  ->  [-1, 1]  (x / 127.5 - 1.0)
+  from tensorflow.keras.applications.efficientnet_v2 import preprocess_input
+
+1. Feature Extraction:  python feature_extraction.py   (1280-d vectors)
+2. Transfer Learning:   python load_pretrained.py       (head only, lr=1e-3)
+3. Fine-Tuning:         python fine_tuning.py
+   Phase 1 (10 ep): head only, lr=1e-3
+   Phase 2 (20 ep): last 40% of backbone unfrozen, lr=1e-5
+   Saved: efficientnetv2s_ft_best.keras
+
+Notes:
+  - Input: 300x300, batch_size=16
+  - NEVER mix preprocess_input with rescale=1./255 — use one or the other
+  - Phase 2 targets MBConv stages 4-5 (SE ratio=0.25) + head conv (1280)

@@ -1,0 +1,43 @@
+Xception — Python Scripts (TensorFlow / Keras)
+================================================
+
+Files
+-----
+  xception.py  — build_xception() — SE + Separable blocks from scratch
+  train.py     — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves xception_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture
+------------
+  Entry Flow  : Conv(32) + Conv(64) + SepBlock(128) + SepBlock(256) + SepBlock(728)
+  Middle Flow : 8 × SepBlock(728)  [identity residual]
+  Exit Flow   : SepBlock(728→1024) + SepConv(1536) + SepConv(2048) + GAP
+  Head        : Dense(num_classes, softmax)
+
+Config
+------
+  Input size    : 299×299
+  Parameters    : ~22.9M
+  Batch size    : 32
+  Epochs        : 30
+  Optimizer     : Adam (lr=1e-3)
+  Scheduler     : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss          : categorical_crossentropy

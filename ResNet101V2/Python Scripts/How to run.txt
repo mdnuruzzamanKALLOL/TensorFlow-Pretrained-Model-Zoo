@@ -1,0 +1,54 @@
+ResNet101V2 — Python Scripts (TensorFlow / Keras)
+==================================================
+
+Files
+-----
+  resnet101v2.py — build_resnet101v2() from scratch (pre-activation bottleneck)
+  train.py       — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py   — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves resnet101v2_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture (vs ResNet101)
+----------------------------
+  Stem    : Conv7x7/2  (NO BN/ReLU after stem — V2 difference)
+  Stage 1 : 3  x PreActBottleneck(64)  s=1               ->  256 x 56x56
+  Stage 2 : 4  x PreActBottleneck(128) s=2               ->  512 x 28x28
+  Stage 3 : 23 x PreActBottleneck(256) s=2               -> 1024 x 14x14
+  Stage 4 : 3  x PreActBottleneck(512) s=2               -> 2048 x  7x7
+  Post    : BN('post_bn') + ReLU('post_relu')   <- required after final pre-act block
+  Head    : GlobalAvgPool -> Dense(num_classes, softmax)
+
+Pre-activation Bottleneck vs Post-activation (V1)
+---------------------------------------------------
+  V1 (ResNet101) : Conv -> BN -> ReLU  (activation AFTER addition)
+  V2 (this)      : BN -> ReLU -> Conv  (activation BEFORE conv, identity shortcut)
+
+  The V2 design ensures the shortcut path is a pure identity: gradients flow
+  unimpeded back through the skip connection without any activation gate.
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~44.7M
+  Batch size  : 16
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy

@@ -1,0 +1,50 @@
+ResNet152 — Python Scripts (TensorFlow / Keras)
+================================================
+
+Files
+-----
+  resnet152.py — build_resnet152() from scratch (same bottleneck as ResNet50/101)
+  train.py     — Adam(lr=1e-3) + ReduceLROnPlateau + ModelCheckpoint
+  inference.py — top-K single-image prediction
+
+Requirements
+------------
+  pip install tensorflow pillow matplotlib scikit-learn numpy
+
+Steps
+-----
+  1. Organize data:
+       data/
+         train/  class_a/  class_b/ ...
+         val/    class_a/  class_b/ ...
+
+  2. Set NUM_CLASSES in train.py (default: 10)
+
+  3. python train.py
+       -> saves resnet152_best.keras
+
+  4. python inference.py your_image.jpg
+
+Architecture
+------------
+  Stem    : Conv7x7/2 + BN + ReLU + MaxPool3x3/2      ->   64 x 56x56
+  Stage 1 : 3  x Bottleneck(64)   s=1  [conv2]        ->  256 x 56x56
+  Stage 2 : 8  x Bottleneck(128)  s=2  [conv3]        ->  512 x 28x28
+  Stage 3 : 36 x Bottleneck(256)  s=2  [conv4]        -> 1024 x 14x14
+  Stage 4 : 3  x Bottleneck(512)  s=2  [conv5]        -> 2048 x  7x7
+  Head    : GlobalAvgPool -> Dense(num_classes, softmax)
+
+  ResNet family depths (for reference):
+    ResNet50  : 3-4- 6-3   ~25.6M  Top-1 74.9%
+    ResNet101 : 3-4-23-3   ~44.5M  Top-1 76.4%
+    ResNet152 : 3-8-36-3   ~60.2M  Top-1 76.6%
+
+Config
+------
+  Input size  : 224x224
+  Parameters  : ~60.2M
+  Batch size  : 16
+  Epochs      : 30
+  Optimizer   : Adam (lr=1e-3)
+  Scheduler   : ReduceLROnPlateau (factor=0.1, patience=5)
+  Loss        : categorical_crossentropy
