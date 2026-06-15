@@ -1,157 +1,68 @@
-# ResNet101V2 — Identity Mappings in Deep Residual Networks (TensorFlow / Keras)
+# ResNet-101 V2 — TensorFlow / Keras Pretrained Model | ImageNet Classification
 
-**Paper:** Identity Mappings in Deep Residual Networks
-**Authors:** Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-**Conference:** ECCV 2016
+> **Keywords:** ResNet-101V2 TensorFlow pretrained 44.7M 77.2% ImageNet pre-activation ECCV Keras transfer learning residual segmentation classification
+
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-Integrated-D00000?style=flat-square&logo=keras&logoColor=white)](https://keras.io/)
+[![ImageNet](https://img.shields.io/badge/Pretrained-ImageNet-4ecdc4?style=flat-square)](https://www.image-net.org/)
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](../../LICENSE)
 
 ---
 
 ## Overview
 
-ResNet101V2 is the V2 variant of ResNet101, redesigned so that the shortcut
-connection carries a pure identity signal. The key change is **pre-activation**:
-Batch Normalization and ReLU are applied *before* each convolution rather than
-after the addition, creating a clean gradient highway through skip connections.
-
-ResNet101V2 has the same stage depths (3-4-**23**-3) as ResNet101 but achieves
-higher Top-1 accuracy (~77.2% vs ~76.4%) due to the improved gradient flow.
+ResNet-101 V2 applies the pre-activation formulation to the 101-layer architecture, achieving 77.2% ImageNet top-1 — a 0.8% improvement over ResNet-101 with identical parameter count. The pre-activation design further benefits deeper networks, making V2 the recommended variant for transfer learning from 101-layer ResNets.
 
 ---
 
-## ResNetV2 Family — Stage Depth Comparison
-
-| Model | Stage 1 | Stage 2 | Stage 3 | Stage 4 | Params | Top-1 |
-|-------|---------|---------|---------|---------|--------|-------|
-| ResNet50V2 | 3 | 4 | **6** | 3 | ~25.6M | ~75.6% |
-| **ResNet101V2** | 3 | 4 | **23** | 3 | ~44.7M | ~77.2% |
-| ResNet152V2 | 3 | 8 | 36 | 3 | ~60.4M | ~78.0% |
-
----
-
-## Pre-activation Bottleneck Block (V2 vs V1)
-
-```
-V1 (ResNet101)                    V2 (ResNet101V2)
-──────────────────────────        ──────────────────────────
-Input                             Input
-  |                                 |
-  +─── shortcut ───────+            +─── shortcut ────────+
-  |   (proj if needed) |            |   (identity / proj) |
-  Conv1x1 -> BN -> ReLU            BN -> ReLU -> Conv1x1
-  Conv3x3 -> BN -> ReLU            BN -> ReLU -> Conv3x3
-  Conv1x1 -> BN                    BN -> ReLU -> Conv1x1
-  |                                 |   (NO BN/ReLU here)
-  Add ─────────────────+            Add ─────────────────+
-  ReLU                              (output, no activation)
-```
-
-In V2, the shortcut path is a **true identity**: no activation, no scaling.
-This allows gradients to flow unmodified from any layer back to the input.
-
----
-
-## Architecture
-
-```
-Input (224×224×3)
-│
-├── Stem : Conv7×7/2  [NO BN/ReLU] + MaxPool3×3/2       →   64 × 56×56
-│
-├── Stage 1 (conv2): 3  × PreActBottleneck(64)   s=1     →  256 × 56×56
-├── Stage 2 (conv3): 4  × PreActBottleneck(128)  s=2     →  512 × 28×28
-├── Stage 3 (conv4): 23 × PreActBottleneck(256)  s=2     → 1024 × 14×14  ← deep
-├── Stage 4 (conv5): 3  × PreActBottleneck(512)  s=2     → 2048 ×  7×7
-│
-├── post_bn  (BatchNorm)      ← required because last block has no post-activation
-├── post_relu (ReLU)
-│
-└── GlobalAvgPool → Dense(num_classes, softmax)
-```
-
----
-
-## Key Stats
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
-| Parameters | ~44.7M |
-| Top-1 (ImageNet) | ~77.2% |
-| Top-5 (ImageNet) | ~93.8% |
-| Input size | 224×224 |
-| Framework | TensorFlow / Keras |
+| **Parameters** | 44.7 M |
+| **Input Resolution** | 224×224 |
+| **ImageNet Top-1** | 77.2% |
+| **ImageNet Top-5** | 93.8% |
+| **Framework** | TensorFlow 2.x / Keras |
+| **TF Class** | `tf.keras.applications.ResNet101V2` |
+| **Year** | 2016 |
+| **Venue** | ECCV 2016 |
 
 ---
 
-## Training Configuration (From Scratch)
+## Architecture Highlights
 
-| Setting | Value |
-|---------|-------|
-| Input size | 224×224 |
-| Batch size | 16 |
-| Optimizer | Adam (lr=1e-3) |
-| Scheduler | ReduceLROnPlateau (factor=0.1, patience=5) |
-| Loss | categorical_crossentropy |
-| Epochs | 30 |
+- Pre-activation residual units across all 101 layers for cleaner gradient flow
+- 23 pre-activation blocks in stage 3 provide the deepest feature hierarchy
+- 0.8% top-1 improvement over ResNet-101 — larger relative gain than V1→V2 at 50 layers
+- Improved training stability: pre-activation BN normalizes residual branch inputs
 
 ---
 
-## Transfer Learning
+## ImageNet Performance — ResNet Family
 
-```python
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.applications.resnet_v2 import preprocess_input
-
-base_model = keras.applications.ResNet101V2(
-    weights='imagenet',
-    include_top=False,
-    input_shape=(224, 224, 3),
-)
-x       = layers.GlobalAveragePooling2D()(base_model.output)  # 2048-dim
-x       = layers.Dropout(0.3)(x)
-outputs = layers.Dense(NUM_CLASSES, activation='softmax')(x)
-model   = keras.Model(inputs=base_model.input, outputs=outputs)
-
-# V2 preprocessing: x/127.5 - 1.0  ->  [-1, 1]   (NOT BGR mean subtraction)
-datagen = keras.preprocessing.image.ImageDataGenerator(
-    preprocessing_function=preprocess_input
-)
-```
-
-### Two-Phase Fine-Tuning
-
-```python
-# Phase 1 — freeze full backbone
-base_model.trainable = False
-model.compile(optimizer=keras.optimizers.Adam(1e-3), ...)
-model.fit(train_gen, epochs=10, ...)
-
-# Phase 2 — unfreeze conv4 (23 blocks) + conv5 + post_bn + post_relu
-base_model.trainable = True
-for layer in base_model.layers:
-    layer.trainable = (
-        layer.name.startswith('conv4') or
-        layer.name.startswith('conv5') or
-        layer.name in ('post_bn', 'post_relu')
-    )
-model.compile(optimizer=keras.optimizers.Adam(1e-5), ...)
-model.fit(train_gen, initial_epoch=10, epochs=30, ...)
-```
-
-**Why unfreeze `post_bn` and `post_relu`?**
-The final block in `conv5` ends with a raw convolution (no BN/ReLU), so
-`post_bn` and `post_relu` are the activation gate for that stage's output.
-If `conv5` weights change but `post_bn` stays frozen, its running statistics
-become mismatched, degrading performance. Always unfreeze them together.
+| Variant | Params | Input | Top-1 | Top-5 |
+|---------|:------:|:-----:|:-----:|:-----:|
+| ResNet50 | 25.6 M | 224² | 74.9% | 92.1% |
+| ResNet50V2 | 25.6 M | 224² | 75.6% | 92.8% |
+| ResNet101 | 44.7 M | 224² | 76.4% | 92.8% |
+| ResNet101V2 | 44.7 M | 224² | 77.2% | 93.8% |
+| ResNet152 | 60.2 M | 224² | 76.6% | 93.1% |
+| ResNet152V2 | 60.2 M | 224² | 78.0% | 94.2% |
 
 ---
 
-## Preprocessing Comparison
+## When to Use ResNet-101 V2
 
-| Model | Mode | Operation | Range |
-|-------|------|-----------|-------|
-| ResNet101 (V1) | caffe | subtract BGR mean [103.939, 116.779, 123.68] | ~[-128, +128] |
-| **ResNet101V2** | tf | `x / 127.5 - 1.0` | [-1, 1] |
+Always use ResNet-101V2 over ResNet-101 for transfer learning — identical cost, better accuracy. Reserve ResNet-101 (V1) only for exact reproducibility requirements.
+
+---
+
+## Real-World Use Cases
+
+- Transfer learning baseline where V2 generalization advantage matters
+- Dense prediction when pre-activation features improve boundary delineation
+- Comparative studies of V1 vs V2 pre-activation formulations at depth 101
 
 ---
 
@@ -159,19 +70,71 @@ become mismatched, degrading performance. Always unfreeze them together.
 
 ```
 ResNet101V2/
-├── README.md
-├── NoteBook/
-│   └── resnet101v2.ipynb          — 17-cell notebook (arch + train + ROC AUC)
-├── Python Scripts/
-│   ├── resnet101v2.py             — build_resnet101v2() from scratch
-│   ├── train.py                   — Adam + ReduceLROnPlateau, batch=16
-│   ├── inference.py               — top-K single-image prediction
-│   └── How to run.txt
-└── Using Weight File/
-    ├── load_pretrained.py         — load Keras Applications ResNet101V2
-    ├── feature_extraction.py      — frozen backbone, GAP + Dense head
-    ├── fine_tuning.py             — two-phase (conv4 x23 + conv5 + post_bn/relu)
-    └── How to run.txt
+├── NoteBook/                 # Jupyter notebook: architecture, training, evaluation
+├── Python Scripts/           # Standalone .py: build, train, single-image inference
+└── Using Weight File/        # feature_extraction.py, fine_tuning.py with ImageNet weights
+```
+
+---
+
+## Quick Start
+
+```python
+import tensorflow as tf
+
+model = tf.keras.applications.ResNet101V2(
+    include_top=True,
+    weights="imagenet",
+    input_shape=(224, 224, 3),
+    classes=1000,
+)
+model.summary()
+```
+
+---
+
+## Transfer Learning
+
+```python
+import tensorflow as tf
+
+NUM_CLASSES = 10  # replace with your number of classes
+
+base = tf.keras.applications.ResNet101V2(
+    include_top=False,
+    weights="imagenet",
+    pooling="avg",
+)
+base.trainable = False  # freeze for feature extraction
+
+x = tf.keras.layers.Dense(256, activation="relu")(base.output)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = tf.keras.Model(base.input, output)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+```
+
+---
+
+## Fine-Tuning (Progressive Unfreeze)
+
+```python
+# Step 1: train the head with frozen base (see Transfer Learning above)
+model.fit(train_ds, epochs=5, validation_data=val_ds)
+
+# Step 2: unfreeze the base and fine-tune with a lower learning rate
+base.trainable = True
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-5),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+model.fit(train_ds, epochs=10, validation_data=val_ds)
 ```
 
 ---
@@ -180,9 +143,20 @@ ResNet101V2/
 
 ```bibtex
 @inproceedings{he2016identity,
-  title     = {Identity Mappings in Deep Residual Networks},
-  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
-  booktitle = {ECCV},
-  year      = {2016}
+  title={Identity Mappings in Deep Residual Networks},
+  author={He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle={ECCV},
+  pages={630--645},
+  year={2016}
 }
 ```
+
+**Paper:** [Identity Mappings in Deep Residual Networks](https://arxiv.org/abs/1603.05027)
+**Authors:** Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+**Venue:** ECCV 2016
+
+---
+
+<div align="center">
+<sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
+</div>

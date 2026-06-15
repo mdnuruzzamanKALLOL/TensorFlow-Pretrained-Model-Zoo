@@ -1,142 +1,70 @@
-# ResNet50V2 — Identity Mappings in Deep Residual Networks (TensorFlow / Keras)
+# ResNet-50 V2 — TensorFlow / Keras Pretrained Model | ImageNet Classification
 
-**Paper:** Identity Mappings in Deep Residual Networks
-**Authors:** Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
-**Conference:** ECCV 2016
+> **Keywords:** ResNet-50V2 TensorFlow pretrained 25.6M 75.6% ImageNet pre-activation Keras transfer learning residual ECCV 2016 classification
+
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-Integrated-D00000?style=flat-square&logo=keras&logoColor=white)](https://keras.io/)
+[![ImageNet](https://img.shields.io/badge/Pretrained-ImageNet-4ecdc4?style=flat-square)](https://www.image-net.org/)
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](../../LICENSE)
 
 ---
 
 ## Overview
 
-ResNet50V2 introduces **pre-activation** residual blocks — moving BatchNorm and ReLU
-to *before* each convolution rather than after. This creates a **true identity shortcut
-path**: the gradient flows from output to input with no transformation in between,
-enabling better optimisation and slightly higher accuracy than ResNet50.
-
-The key insight: in the original ResNet, the shortcut passes through a ReLU, which
-blocks negative gradient signals. Pre-activation removes this bottleneck.
+ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of Conv→BN→ReLU), creating cleaner identity paths that improve gradient flow and generalization. It achieves 75.6% ImageNet top-1 — 0.7% better than ResNet-50 with identical parameters — and is generally preferred when starting from ImageNet weights for transfer learning.
 
 ---
 
-## Pre-activation vs Post-activation
-
-| | ResNet50 (V1) | ResNet50V2 (V2) |
-|--|--|--|
-| Conv order | Conv → BN → ReLU | **BN → ReLU → Conv** |
-| Shortcut path | Passes through Add → ReLU | **True identity (Add only)** |
-| Stem | Conv → BN → ReLU → Pool | **Conv → Pool** (no BN/ReLU) |
-| Final layer | Last block has BN+ReLU | **Extra post-BN+ReLU before GAP** |
-| Preprocessing | Subtract BGR mean (~caffe) | **Scale to [-1, 1] (~tf mode)** |
-| Top-1 ImageNet | ~74.9% | **~75.6%** |
-
----
-
-## Pre-activation Bottleneck Block
-
-```
-Input (x)
-  |
-  +-- BN + ReLU  (= preact)
-      |
-      +-- [if conv_shortcut] Conv1x1(filters*4, stride) -> shortcut
-      |   [else             ] x  (identity, or MaxPool if stride>1)
-      |
-      Conv1x1(filters)   -> BN -> ReLU
-      Conv3x3(filters, stride) -> BN -> ReLU
-      Conv1x1(filters*4)          [no BN/ReLU — next block's preact handles it]
-      |
-      Add([conv_path, shortcut]) -> output
-```
-
-The last Conv1×1 has **no** BN or ReLU after it; the next block's BN+ReLU handles
-normalisation, keeping the shortcut path clean.
-
----
-
-## Architecture
-
-```
-Input (224×224×3)
-│
-├── Stem  : Conv7×7/2 [no BN/ReLU] + MaxPool3×3/2   →   64 × 56×56
-│
-├── Stage 1 (conv2): 3 × PreActBottleneck(64)  s=1   →  256 × 56×56
-├── Stage 2 (conv3): 4 × PreActBottleneck(128) s=2   →  512 × 28×28
-├── Stage 3 (conv4): 6 × PreActBottleneck(256) s=2   → 1024 × 14×14
-├── Stage 4 (conv5): 3 × PreActBottleneck(512) s=2   → 2048 ×  7×7
-│
-├── Post BN + ReLU  [unique to V2]
-└── GlobalAvgPool → Dense(num_classes, softmax)
-```
-
----
-
-## Key Stats
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
-| Parameters | ~25.6M |
-| Top-1 (ImageNet) | ~75.6% |
-| Top-5 (ImageNet) | ~92.8% |
-| Input size | 224×224 |
-| Framework | TensorFlow / Keras |
+| **Parameters** | 25.6 M |
+| **Input Resolution** | 224×224 |
+| **ImageNet Top-1** | 75.6% |
+| **ImageNet Top-5** | 92.8% |
+| **Framework** | TensorFlow 2.x / Keras |
+| **TF Class** | `tf.keras.applications.ResNet50V2` |
+| **Year** | 2016 |
+| **Venue** | ECCV 2016 |
 
 ---
 
-## Training Configuration (From Scratch)
+## Architecture Highlights
 
-| Setting | Value |
-|---------|-------|
-| Input size | 224×224 |
-| Batch size | 32 |
-| Optimizer | Adam (lr=1e-3) |
-| Scheduler | ReduceLROnPlateau (factor=0.1, patience=5) |
-| Loss | categorical_crossentropy |
-| Epochs | 30 |
+- Pre-activation order: BatchNorm → ReLU → Conv (vs post-activation in V1)
+- Full pre-activation residual unit enables true identity shortcuts
+- Improved gradient flow and regularization from pre-activation BatchNorm
+- 0.7% top-1 improvement over ResNet-50 with same architecture and parameters
+- Better generalization on small downstream datasets due to cleaner gradient paths
 
 ---
 
-## Transfer Learning
+## ImageNet Performance — ResNet Family
 
-```python
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.applications.resnet_v2 import preprocess_input
+| Variant | Params | Input | Top-1 | Top-5 |
+|---------|:------:|:-----:|:-----:|:-----:|
+| ResNet50 | 25.6 M | 224² | 74.9% | 92.1% |
+| ResNet50V2 | 25.6 M | 224² | 75.6% | 92.8% |
+| ResNet101 | 44.7 M | 224² | 76.4% | 92.8% |
+| ResNet101V2 | 44.7 M | 224² | 77.2% | 93.8% |
+| ResNet152 | 60.2 M | 224² | 76.6% | 93.1% |
+| ResNet152V2 | 60.2 M | 224² | 78.0% | 94.2% |
 
-base_model = keras.applications.ResNet50V2(
-    weights='imagenet',
-    include_top=False,
-    input_shape=(224, 224, 3),
-)
-x       = layers.GlobalAveragePooling2D()(base_model.output)
-x       = layers.Dropout(0.3)(x)
-outputs = layers.Dense(NUM_CLASSES, activation='softmax')(x)
-model   = keras.Model(inputs=base_model.input, outputs=outputs)
+---
 
-# IMPORTANT: ResNet50V2 uses "tf" mode preprocessing — scale to [-1, 1]
-# This is DIFFERENT from ResNet50 (which subtracts BGR mean)
-datagen = keras.preprocessing.image.ImageDataGenerator(
-    preprocessing_function=preprocess_input   # x / 127.5 - 1.0
-)
-```
+## When to Use ResNet-50 V2
 
-### Two-Phase Fine-Tuning
+Prefer ResNet-50V2 over ResNet-50 for transfer learning — same parameters, 0.7% better top-1, cleaner identity paths. Use ResNet-50 only when V1 architecture is specifically required for reproducibility or framework compatibility.
 
-```python
-# Phase 1 — freeze full backbone
-base_model.trainable = False
-model.compile(optimizer=keras.optimizers.Adam(1e-3), ...)
-model.fit(train_gen, epochs=10, ...)
+---
 
-# Phase 2 — unfreeze conv4, conv5 stages + post_bn/relu
-base_model.trainable = True
-for layer in base_model.layers:
-    keep = layer.name.startswith('conv4') or layer.name.startswith('conv5') \
-           or layer.name in ('post_bn', 'post_relu')
-    layer.trainable = keep
-model.compile(optimizer=keras.optimizers.Adam(1e-5), ...)
-model.fit(train_gen, initial_epoch=10, epochs=30, ...)
-```
+## Real-World Use Cases
+
+- Transfer learning where V2's improved generalization matters
+- Fine-tuning on domain-specific datasets with limited data
+- Backbone for detection heads when marginal accuracy improvement is valued
+- Research requiring controlled comparison between V1 and V2 residual formulations
 
 ---
 
@@ -144,19 +72,71 @@ model.fit(train_gen, initial_epoch=10, epochs=30, ...)
 
 ```
 ResNet50V2/
-├── README.md
-├── NoteBook/
-│   └── resnet50v2.ipynb         — 17-cell notebook (arch + train + ROC AUC)
-├── Python Scripts/
-│   ├── resnet50v2.py            — build_resnet50v2() from scratch
-│   ├── train.py                 — Adam + ReduceLROnPlateau training loop
-│   ├── inference.py             — top-K single-image prediction
-│   └── How to run.txt
-└── Using Weight File/
-    ├── load_pretrained.py       — load Keras Applications ResNet50V2
-    ├── feature_extraction.py    — frozen backbone, GAP + Dense head
-    ├── fine_tuning.py           — two-phase fine-tuning (conv4+5 unfreeze)
-    └── How to run.txt
+├── NoteBook/                 # Jupyter notebook: architecture, training, evaluation
+├── Python Scripts/           # Standalone .py: build, train, single-image inference
+└── Using Weight File/        # feature_extraction.py, fine_tuning.py with ImageNet weights
+```
+
+---
+
+## Quick Start
+
+```python
+import tensorflow as tf
+
+model = tf.keras.applications.ResNet50V2(
+    include_top=True,
+    weights="imagenet",
+    input_shape=(224, 224, 3),
+    classes=1000,
+)
+model.summary()
+```
+
+---
+
+## Transfer Learning
+
+```python
+import tensorflow as tf
+
+NUM_CLASSES = 10  # replace with your number of classes
+
+base = tf.keras.applications.ResNet50V2(
+    include_top=False,
+    weights="imagenet",
+    pooling="avg",
+)
+base.trainable = False  # freeze for feature extraction
+
+x = tf.keras.layers.Dense(256, activation="relu")(base.output)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = tf.keras.Model(base.input, output)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+```
+
+---
+
+## Fine-Tuning (Progressive Unfreeze)
+
+```python
+# Step 1: train the head with frozen base (see Transfer Learning above)
+model.fit(train_ds, epochs=5, validation_data=val_ds)
+
+# Step 2: unfreeze the base and fine-tune with a lower learning rate
+base.trainable = True
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-5),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+model.fit(train_ds, epochs=10, validation_data=val_ds)
 ```
 
 ---
@@ -165,9 +145,20 @@ ResNet50V2/
 
 ```bibtex
 @inproceedings{he2016identity,
-  title     = {Identity Mappings in Deep Residual Networks},
-  author    = {He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
-  booktitle = {ECCV},
-  year      = {2016}
+  title={Identity Mappings in Deep Residual Networks},
+  author={He, Kaiming and Zhang, Xiangyu and Ren, Shaoqing and Sun, Jian},
+  booktitle={ECCV},
+  pages={630--645},
+  year={2016}
 }
 ```
+
+**Paper:** [Identity Mappings in Deep Residual Networks](https://arxiv.org/abs/1603.05027)
+**Authors:** Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun
+**Venue:** ECCV 2016
+
+---
+
+<div align="center">
+<sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
+</div>

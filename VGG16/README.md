@@ -1,114 +1,67 @@
-# VGG16 — Very Deep Convolutional Networks (TensorFlow / Keras)
+# VGG-16 — TensorFlow / Keras Pretrained Model | ImageNet Classification
 
-**Paper:** Very Deep Convolutional Networks for Large-Scale Image Recognition
-**Authors:** Karen Simonyan, Andrew Zisserman
-**Conference:** ICLR 2015
+> **Keywords:** VGG-16 TensorFlow pretrained 138M 71.3% ImageNet style transfer perceptual loss Keras feature extraction classification 2014
+
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-Integrated-D00000?style=flat-square&logo=keras&logoColor=white)](https://keras.io/)
+[![ImageNet](https://img.shields.io/badge/Pretrained-ImageNet-4ecdc4?style=flat-square)](https://www.image-net.org/)
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](../../LICENSE)
 
 ---
 
 ## Overview
 
-VGG16 demonstrated that network **depth** is a critical component for good performance.
-The key design principle: use only 3×3 convolutions (the smallest useful size) stacked
-in homogeneous blocks, separated by max-pooling. This simplicity made VGG widely adopted
-as a backbone and feature extractor.
-
-Two stacked 3×3 convolutions have the same receptive field as one 5×5 convolution, but
-with fewer parameters and one extra non-linearity. Three stacked 3×3 equal one 7×7.
+VGG-16 uses a uniform architecture of 3×3 convolutions stacked in 13 convolutional layers and 3 fully-connected layers, demonstrating that network depth with small filters is the key factor in achieving strong performance. Despite 138 M parameters, it achieves 71.3% ImageNet top-1 and remains a foundational model for style transfer and perceptual loss functions.
 
 ---
 
-## Architecture
-
-```
-Input (224×224×3)
-│
-├── Block 1 : Conv(64)×2  + MaxPool(2×2)   →  64 × 112×112
-├── Block 2 : Conv(128)×2 + MaxPool(2×2)   → 128 ×  56×56
-├── Block 3 : Conv(256)×3 + MaxPool(2×2)   → 256 ×  28×28
-├── Block 4 : Conv(512)×3 + MaxPool(2×2)   → 512 ×  14×14
-├── Block 5 : Conv(512)×3 + MaxPool(2×2)   → 512 ×   7×7
-│
-├── Flatten                                 → 25,088
-├── Dense(4096) + ReLU + Dropout(0.5)
-├── Dense(4096) + ReLU + Dropout(0.5)
-└── Dense(num_classes) + Softmax
-```
-
-All conv layers: 3×3 kernel, padding='same', ReLU activation, no bias when using BN.
-All max-pools : 2×2 window, stride=2.
-
----
-
-## Key Stats
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
-| Parameters | ~138M |
-| Top-1 (ImageNet) | ~71.3% |
-| Top-5 (ImageNet) | ~90.1% |
-| Input size | 224×224 |
-| Framework | TensorFlow / Keras |
-
-Note: ~102M of the 138M parameters are in the Dense(4096)×2 head (Flatten: 25,088→4096).
-This is why feature extraction with a lighter head is common in practice.
-
----
-
-## Training Configuration (From Scratch)
-
-| Setting | Value |
-|---------|-------|
-| Input size | 224×224 |
-| Batch size | 32 |
-| Optimizer | Adam (lr=1e-3) |
-| Scheduler | ReduceLROnPlateau (factor=0.1, patience=5) |
-| Loss | categorical_crossentropy |
-| Epochs | 30 |
-| Augmentation | rotation, shift, flip, zoom, shear |
+| **Parameters** | 138 M |
+| **Input Resolution** | 224×224 |
+| **ImageNet Top-1** | 71.3% |
+| **ImageNet Top-5** | 90.1% |
+| **Framework** | TensorFlow 2.x / Keras |
+| **TF Class** | `tf.keras.applications.VGG16` |
+| **Year** | 2014 |
+| **Venue** | ICLR 2015 |
 
 ---
 
-## Transfer Learning
+## Architecture Highlights
 
-```python
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.applications.vgg16 import preprocess_input
+- Uniform 3×3 convolutional filters throughout all 13 conv layers
+- 5 max-pooling stages for progressive spatial downsampling
+- 3 fully-connected layers at the top (4096→4096→1000)
+- Homogeneous architecture makes it easy to analyze and modify
+- fc6/fc7 layers commonly extracted as 4096-dim image embeddings
 
-base_model = keras.applications.VGG16(
-    weights='imagenet',
-    include_top=False,      # drop the Dense(4096)×2 + Dense(1000) head
-    input_shape=(224, 224, 3),
-)
-x       = layers.GlobalAveragePooling2D()(base_model.output)
-x       = layers.Dense(512, activation='relu')(x)
-x       = layers.Dropout(0.5)(x)
-outputs = layers.Dense(NUM_CLASSES, activation='softmax')(x)
-model   = keras.Model(inputs=base_model.input, outputs=outputs)
+---
 
-# IMPORTANT: use VGG16-specific preprocessing
-datagen = keras.preprocessing.image.ImageDataGenerator(
-    preprocessing_function=preprocess_input   # subtracts BGR mean, does NOT /255
-)
-```
+## ImageNet Performance — VGG Family
 
-### Two-Phase Fine-Tuning
+| Model | Params | Input | Top-1 | Top-5 |
+|-------|:------:|:-----:|:-----:|:-----:|
+| VGG16 | 138 M | 224² | 71.3% | 90.1% |
+| VGG19 | 143.7 M | 224² | 71.3% | 90.0% |
 
-```python
-# Phase 1 — freeze all conv blocks, train head only
-base_model.trainable = False
-model.compile(optimizer=keras.optimizers.Adam(1e-3), ...)
-model.fit(train_gen, epochs=10, ...)
+---
 
-# Phase 2 — unfreeze block4 + block5 (keep blocks 1-3 frozen)
-base_model.trainable = True
-for layer in base_model.layers:
-    if 'block1' in layer.name or 'block2' in layer.name or 'block3' in layer.name:
-        layer.trainable = False
-model.compile(optimizer=keras.optimizers.Adam(1e-5), ...)
-model.fit(train_gen, initial_epoch=10, epochs=30, ...)
-```
+## When to Use VGG-16
+
+Use VGG-16 specifically for style transfer and perceptual loss computation — these applications were designed around VGG's feature maps. For classification or transfer learning, ResNet-50 and EfficientNet are far more efficient.
+
+---
+
+## Real-World Use Cases
+
+- Neural style transfer (Gatys et al. uses VGG-16/19 perceptual loss)
+- Perceptual loss for image super-resolution and image-to-image translation
+- Feature extraction for classic computer vision systems
+- Educational: clear, simple architecture for teaching CNNs
+- Content-based image retrieval using fc7 embeddings
 
 ---
 
@@ -116,19 +69,71 @@ model.fit(train_gen, initial_epoch=10, epochs=30, ...)
 
 ```
 VGG16/
-├── README.md
-├── NoteBook/
-│   └── vgg16.ipynb              — 17-cell notebook (arch + train + ROC AUC)
-├── Python Scripts/
-│   ├── vgg16.py                 — build_vgg16() from scratch
-│   ├── train.py                 — Adam + ReduceLROnPlateau training loop
-│   ├── inference.py             — top-K single-image prediction
-│   └── How to run.txt
-└── Using Weight File/
-    ├── load_pretrained.py       — load Keras Applications VGG16
-    ├── feature_extraction.py    — frozen backbone, GAP + Dense head
-    ├── fine_tuning.py           — two-phase fine-tuning (block4+5 unfreeze)
-    └── How to run.txt
+├── NoteBook/                 # Jupyter notebook: architecture, training, evaluation
+├── Python Scripts/           # Standalone .py: build, train, single-image inference
+└── Using Weight File/        # feature_extraction.py, fine_tuning.py with ImageNet weights
+```
+
+---
+
+## Quick Start
+
+```python
+import tensorflow as tf
+
+model = tf.keras.applications.VGG16(
+    include_top=True,
+    weights="imagenet",
+    input_shape=(224, 224, 3),
+    classes=1000,
+)
+model.summary()
+```
+
+---
+
+## Transfer Learning
+
+```python
+import tensorflow as tf
+
+NUM_CLASSES = 10  # replace with your number of classes
+
+base = tf.keras.applications.VGG16(
+    include_top=False,
+    weights="imagenet",
+    pooling="avg",
+)
+base.trainable = False  # freeze for feature extraction
+
+x = tf.keras.layers.Dense(256, activation="relu")(base.output)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = tf.keras.Model(base.input, output)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+```
+
+---
+
+## Fine-Tuning (Progressive Unfreeze)
+
+```python
+# Step 1: train the head with frozen base (see Transfer Learning above)
+model.fit(train_ds, epochs=5, validation_data=val_ds)
+
+# Step 2: unfreeze the base and fine-tune with a lower learning rate
+base.trainable = True
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-5),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+model.fit(train_ds, epochs=10, validation_data=val_ds)
 ```
 
 ---
@@ -136,10 +141,20 @@ VGG16/
 ## Citation
 
 ```bibtex
-@inproceedings{simonyan2015very,
-  title     = {Very Deep Convolutional Networks for Large-Scale Image Recognition},
-  author    = {Simonyan, Karen and Zisserman, Andrew},
-  booktitle = {ICLR},
-  year      = {2015}
+@article{simonyan2014very,
+  title={Very Deep Convolutional Networks for Large-Scale Image Recognition},
+  author={Simonyan, Karen and Zisserman, Andrew},
+  journal={arXiv preprint arXiv:1409.1556},
+  year={2014}
 }
 ```
+
+**Paper:** [Very Deep Convolutional Networks for Large-Scale Image Recognition](https://arxiv.org/abs/1409.1556)
+**Authors:** Karen Simonyan, Andrew Zisserman
+**Venue:** ICLR 2015
+
+---
+
+<div align="center">
+<sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
+</div>

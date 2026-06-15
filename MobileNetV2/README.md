@@ -1,107 +1,67 @@
-# MobileNetV2 — Inverted Residuals and Linear Bottlenecks (TensorFlow / Keras)
+# MobileNet V2 — TensorFlow / Keras Pretrained Model | ImageNet Classification
 
-**Paper:** MobileNetV2: Inverted Residuals and Linear Bottlenecks
-**Authors:** Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chieh Chen
-**Conference:** CVPR 2018
+> **Keywords:** MobileNetV2 TensorFlow pretrained 3.4M 71.3% ImageNet mobile edge TFLite Keras inverted residuals linear bottleneck real-time classification 2018
+
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-Integrated-D00000?style=flat-square&logo=keras&logoColor=white)](https://keras.io/)
+[![ImageNet](https://img.shields.io/badge/Pretrained-ImageNet-4ecdc4?style=flat-square)](https://www.image-net.org/)
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](../../LICENSE)
 
 ---
 
 ## Overview
 
-MobileNetV2 introduces two key ideas on top of MobileNetV1:
-
-1. **Inverted Residuals** — the shortcut connects narrow (low-channel) layers while
-   the internal expansion happens in between (opposite of ResNet bottlenecks).
-
-2. **Linear Bottleneck** — the final projection in each block uses **no activation**
-   (linear output), preventing ReLU from destroying information in low-dimensional
-   manifolds.
-
-Result: ~3.5M parameters, ~71.3% Top-1 — *fewer params AND higher accuracy* than V1.
+MobileNetV2 introduces Inverted Residual blocks with Linear Bottlenecks, achieving 71.3% ImageNet top-1 with only 3.4 M parameters — 20% fewer than MobileNet V1 while being more accurate. Its bottleneck feature maps are preserved without non-linearity, preventing information loss in low-dimensional representations.
 
 ---
 
-## Inverted Residual Block
-
-```
-                   ┌── Residual connection ──────────────────┐
-Input (H×W×C_in)   │                                         │
-        │          │                                         ↓
-        ├── [Expand] Conv1×1(C_in × t) + BN + ReLU6         │  (skipped if t=1)
-        ├── DWConv3×3(stride)           + BN + ReLU6         │
-        └── [Project] Conv1×1(C_out)   + BN   (NO activation)│
-Output (H/s × W/s × C_out) ─────── Add ───────────────────→ │
-                                  (only if stride=1 and C_in==C_out)
-```
-
-**Why linear bottleneck?** Low-dimensional manifolds lose information when passed
-through ReLU (negative values zeroed). Removing activation at the bottleneck
-preserves the manifold intact for the residual to add onto.
-
----
-
-## Architecture
-
-```
-Input (224×224×3)
-│
-├── Stem: Conv3×3/2(32) + BN + ReLU6        → 112×112×32
-│
-├── expanded_conv: t=1, c=16,  n=1, s=1     → 112×112×16
-├── block_1..2:    t=6, c=24,  n=2, s=2     →  56×56×24
-├── block_3..5:    t=6, c=32,  n=3, s=2     →  28×28×32
-├── block_6..9:    t=6, c=64,  n=4, s=2     →  14×14×64
-├── block_10..12:  t=6, c=96,  n=3, s=1     →  14×14×96
-├── block_13..15:  t=6, c=160, n=3, s=2     →   7×7×160
-├── block_16:      t=6, c=320, n=1, s=1     →   7×7×320
-├── Conv_1: Conv1×1(1280) + BN + ReLU6      →   7×7×1280
-│
-└── GlobalAvgPool → Dense(num_classes, softmax)
-```
-
----
-
-## V1 vs V2 Comparison
-
-| | MobileNetV1 | MobileNetV2 |
-|--|-------------|-------------|
-| Block | DWConv + PWConv | Expand + DWConv + Linear Project |
-| Residual | No | Yes (stride=1, same dims) |
-| Activation | ReLU6 everywhere | ReLU6 except last projection |
-| Head | GAP directly | Conv1×1(1280) → GAP |
-| Params | ~4.2M | ~3.5M |
-| Top-1 | ~70.6% | ~71.3% |
-
----
-
-## Key Stats
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
-| Parameters | ~3.5M |
-| Top-1 (ImageNet) | ~71.3% |
-| Input size | 224×224 |
-| Total IR blocks | 17 |
-| Head channels | 1280 |
+| **Parameters** | 3.4 M |
+| **Input Resolution** | 224×224 |
+| **ImageNet Top-1** | 71.3% |
+| **ImageNet Top-5** | 90.1% |
+| **Framework** | TensorFlow 2.x / Keras |
+| **TF Class** | `tf.keras.applications.MobileNetV2` |
+| **Year** | 2018 |
+| **Venue** | CVPR 2018 |
 
 ---
 
-## Transfer Learning
+## Architecture Highlights
 
-```python
-from tensorflow import keras
-from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+- Inverted residuals: expands channels in bottleneck then projects back to narrow output
+- Linear bottleneck output layer (no ReLU) preserves manifold structure
+- Expansion factor t=6 in each block: channels expand 6× before depthwise conv
+- Residual shortcuts between bottleneck layers for gradient flow
+- Better accuracy than MobileNetV1 with 20% fewer parameters
 
-base_model = keras.applications.MobileNetV2(
-    weights='imagenet', include_top=False, input_shape=(224, 224, 3))
-x = keras.layers.GlobalAveragePooling2D()(base_model.output)  # 1280-dim
-x = keras.layers.Dropout(0.3)(x)
-outputs = keras.layers.Dense(NUM_CLASSES, activation='softmax')(x)
-model = keras.Model(base_model.input, outputs)
+---
 
-datagen = keras.preprocessing.image.ImageDataGenerator(
-    preprocessing_function=preprocess_input)  # x/127.5 - 1.0
-```
+## ImageNet Performance — MobileNet Family
+
+| Model | Params | Input | Top-1 | Top-5 |
+|-------|:------:|:-----:|:-----:|:-----:|
+| MobileNet | 4.2 M | 224² | 70.4% | 89.5% |
+| MobileNetV2 | 3.4 M | 224² | 71.3% | 90.1% |
+
+---
+
+## When to Use MobileNet V2
+
+MobileNetV2 is the standard recommendation for mobile deployment requiring 70–72% accuracy. More accurate than V1 with fewer parameters. Use EfficientNet-B0 when > 77% accuracy is required with similar latency budget.
+
+---
+
+## Real-World Use Cases
+
+- Production mobile apps on iOS and Android with TFLite quantization
+- DeepLab V3+ semantic segmentation backbone for mobile
+- SSDLite object detection for real-time mobile inference
+- Edge AI on Coral Edge TPU and Jetson Nano
+- Transfer learning baseline for agricultural and retail edge apps
 
 ---
 
@@ -109,19 +69,71 @@ datagen = keras.preprocessing.image.ImageDataGenerator(
 
 ```
 MobileNetV2/
-├── README.md
-├── NoteBook/
-│   └── mobilenetv2.ipynb
-├── Python Scripts/
-│   ├── mobilenetv2.py        — build_mobilenetv2(alpha=1.0) from scratch
-│   ├── train.py
-│   ├── inference.py
-│   └── How to run.txt
-└── Using Weight File/
-    ├── load_pretrained.py
-    ├── feature_extraction.py
-    ├── fine_tuning.py        — unfreeze block_13-16 + Conv_1
-    └── How to run.txt
+├── NoteBook/                 # Jupyter notebook: architecture, training, evaluation
+├── Python Scripts/           # Standalone .py: build, train, single-image inference
+└── Using Weight File/        # feature_extraction.py, fine_tuning.py with ImageNet weights
+```
+
+---
+
+## Quick Start
+
+```python
+import tensorflow as tf
+
+model = tf.keras.applications.MobileNetV2(
+    include_top=True,
+    weights="imagenet",
+    input_shape=(224, 224, 3),
+    classes=1000,
+)
+model.summary()
+```
+
+---
+
+## Transfer Learning
+
+```python
+import tensorflow as tf
+
+NUM_CLASSES = 10  # replace with your number of classes
+
+base = tf.keras.applications.MobileNetV2(
+    include_top=False,
+    weights="imagenet",
+    pooling="avg",
+)
+base.trainable = False  # freeze for feature extraction
+
+x = tf.keras.layers.Dense(256, activation="relu")(base.output)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = tf.keras.Model(base.input, output)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+```
+
+---
+
+## Fine-Tuning (Progressive Unfreeze)
+
+```python
+# Step 1: train the head with frozen base (see Transfer Learning above)
+model.fit(train_ds, epochs=5, validation_data=val_ds)
+
+# Step 2: unfreeze the base and fine-tune with a lower learning rate
+base.trainable = True
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-5),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+model.fit(train_ds, epochs=10, validation_data=val_ds)
 ```
 
 ---
@@ -130,10 +142,20 @@ MobileNetV2/
 
 ```bibtex
 @inproceedings{sandler2018mobilenetv2,
-  title     = {MobileNetV2: Inverted Residuals and Linear Bottlenecks},
-  author    = {Sandler, Mark and Howard, Andrew and Zhu, Menglong and
-               Zhmoginov, Andrey and Chen, Liang-Chieh},
-  booktitle = {CVPR},
-  year      = {2018}
+  title={{MobileNetV2}: Inverted Residuals and Linear Bottlenecks},
+  author={Sandler, Mark and Howard, Andrew and Zhu, Menglong and Zhmoginov, Andrey and Chen, Liang-Chieh},
+  booktitle={CVPR},
+  pages={4510--4520},
+  year={2018}
 }
 ```
+
+**Paper:** [MobileNetV2: Inverted Residuals and Linear Bottlenecks](https://arxiv.org/abs/1801.04381)
+**Authors:** Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chieh Chen
+**Venue:** CVPR 2018
+
+---
+
+<div align="center">
+<sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
+</div>

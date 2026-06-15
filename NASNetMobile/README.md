@@ -1,124 +1,66 @@
-# NASNetMobile — Neural Architecture Search Network (TensorFlow / Keras)
+# NASNet Mobile — TensorFlow / Keras Pretrained Model | ImageNet Classification
 
-**Paper:** Learning Transferable Architectures for Scalable Image Recognition
-**Authors:** Barret Zoph, Vijay Vasudevan, Jonathon Shlens, Quoc V. Le
-**Conference:** CVPR 2018
+> **Keywords:** NASNetMobile TensorFlow pretrained 5.3M 74.4% ImageNet NAS mobile Keras neural architecture search transfer learning classification 2018
+
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-Integrated-D00000?style=flat-square&logo=keras&logoColor=white)](https://keras.io/)
+[![ImageNet](https://img.shields.io/badge/Pretrained-ImageNet-4ecdc4?style=flat-square)](https://www.image-net.org/)
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](../../LICENSE)
 
 ---
 
 ## Overview
 
-NASNetMobile uses cells discovered by **Neural Architecture Search (NAS)** —
-an automated process that learns the optimal building blocks rather than having
-humans design them. The cells were found on CIFAR-10 and then transferred to
-ImageNet scale, giving strong accuracy relative to the parameter count.
-
-NASNetMobile is the compact, mobile-targeted variant (~5.3M parameters). It
-achieves ~74.4% Top-1 accuracy — comparable to ResNet50 (~74.9%) at roughly
-1/5 the parameter count.
+NASNet Mobile is a cell-based architecture discovered by Neural Architecture Search (NAS) optimized for mobile (< 600 M MAdds) constraints. With 5.3 M parameters, it achieves 74.4% ImageNet top-1 — surpassing MobileNetV2 (71.3%) at similar complexity — by using automatically designed Normal and Reduction cells rather than hand-crafted blocks.
 
 ---
 
-## NAS Cells
-
-NASNet uses two learned cell types stacked repeatedly:
-
-**Normal Cell** — preserves spatial dimensions (analogous to a residual block)
-```
-h = relu(ip) -> conv1x1 -> BN
-p = adjusted previous cell output
-
-x1: sep5x5(h)  + identity(h)
-x2: sep5x5(p)  + sep3x3(h)
-x3: avg3x3(h)  + p
-x4: avg3x3(p)  + avg3x3(p)
-x5: max3x3(h)  + sep3x3(p)
-
-Output: Concat([p, x1, x2, x3, x4, x5])  ->  6 × filters channels
-```
-
-**Reduction Cell** — halves spatial dimensions (analogous to a strided block)
-```
-x1: sep5x5_s2(h) + sep7x7_s2(p)
-x2: max3x3_s2(h) + sep7x7_s2(p)
-x3: avg3x3_s2(h) + sep5x5_s2(p)
-x4: avg3x3_s1(x1) + x2
-x5: sep3x3_s1(x1) + max3x3_s2(h)
-
-Output: Concat([x2, x3, x4, x5])  ->  4 × filters channels
-```
-
-Each `_sep_conv_bn` is two stacked depthwise-separable convolutions,
-with ReLU prefix and BN suffix on each.
-
----
-
-## Architecture
-
-```
-Input (224×224×3)
-│
-├── Stem: Conv3×3/2 (32 filters, valid)   →  ~111×111×32
-│
-├── Stem Reduction Cell (filters*4=176)   →   ~56×56×704
-├── Stem Reduction Cell (filters*2=88)    →   ~28×28×352
-│
-├── Group 1: 4 × Normal Cell (filters=44) →   ~28×28×264
-├── Reduction Cell (filters*2=88)         →   ~14×14×352
-│
-├── Group 2: 4 × Normal Cell (filters=88) →   ~14×14×528
-├── Reduction Cell (filters*4=176)        →    ~7×7×704
-│
-├── Group 3: 4 × Normal Cell (filters=176)→    ~7×7×1056
-│
-├── ReLU → GlobalAvgPool → Dense(num_classes)
-```
-
----
-
-## Key Stats
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
-| Parameters | ~5.3M |
-| Top-1 (ImageNet) | ~74.4% |
-| Top-5 (ImageNet) | ~91.7% |
-| Input size | 224×224 |
-| Filters (base) | 44 |
-| Normal Cells / group | 4 |
+| **Parameters** | 5.3 M |
+| **Input Resolution** | 224×224 |
+| **ImageNet Top-1** | 74.4% |
+| **ImageNet Top-5** | 91.9% |
+| **Framework** | TensorFlow 2.x / Keras |
+| **TF Class** | `tf.keras.applications.NASNetMobile` |
+| **Year** | 2018 |
+| **Venue** | CVPR 2018 |
 
 ---
 
-## NASNet Family Comparison
+## Architecture Highlights
 
-| Model | Params | Top-1 | Input |
-|-------|--------|-------|-------|
-| **NASNetMobile** | ~5.3M | ~74.4% | 224×224 |
-| NASNetLarge | ~88.9M | ~82.5% | 331×331 |
+- Automatically designed Normal Cell and Reduction Cell via NAS controller
+- Cell-based architecture with N=4 cells repeated per stage
+- Skip connections and identity operations discovered by the NAS process
+- 5.3 M parameters with 74.4% top-1 — stronger than hand-designed mobile models
+- Transferable cells: same cell structure scales to NASNetLarge
 
 ---
 
-## Transfer Learning
+## ImageNet Performance — NASNet Family
 
-```python
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.applications.nasnet import preprocess_input
+| Model | Params | Input | Top-1 | Top-5 |
+|-------|:------:|:-----:|:-----:|:-----:|
+| NASNetMobile | 5.3 M | 224² | 74.4% | 91.9% |
+| NASNetLarge | 88.9 M | 331² | 82.7% | 96.2% |
 
-base_model = keras.applications.NASNetMobile(
-    weights='imagenet',
-    include_top=False,
-    input_shape=(224, 224, 3),
-)
-x       = layers.GlobalAveragePooling2D()(base_model.output)
-x       = layers.Dropout(0.3)(x)
-outputs = layers.Dense(NUM_CLASSES, activation='softmax')(x)
-model   = keras.Model(base_model.input, outputs)
+---
 
-datagen = keras.preprocessing.image.ImageDataGenerator(
-    preprocessing_function=preprocess_input   # x/127.5 - 1.0
-)
-```
+## When to Use NASNet Mobile
+
+Use NASNetMobile when you need > 74% accuracy on mobile hardware and MobileNetV2 (71.3%) is insufficient. Note: training is slower than MobileNets due to cell complexity. EfficientNet-B0 (77.1%) is usually more practical for new work.
+
+---
+
+## Real-World Use Cases
+
+- Mobile apps requiring higher accuracy (74%) than MobileNetV2
+- NAS architecture research baseline and ablation studies
+- Edge devices with 1–2 GB RAM and moderate inference requirements
+- Transfer learning when discovered architecture generalization is desired
 
 ---
 
@@ -126,19 +68,71 @@ datagen = keras.preprocessing.image.ImageDataGenerator(
 
 ```
 NASNetMobile/
-├── README.md
-├── NoteBook/
-│   └── nasnetmobile.ipynb          — 17-cell notebook
-├── Python Scripts/
-│   ├── nasnetmobile.py             — build_nasnetmobile() from scratch
-│   ├── train.py                    — Adam + ReduceLROnPlateau
-│   ├── inference.py                — top-K prediction
-│   └── How to run.txt
-└── Using Weight File/
-    ├── load_pretrained.py          — load Keras NASNetMobile
-    ├── feature_extraction.py       — frozen backbone
-    ├── fine_tuning.py              — last 30%% layers unfrozen
-    └── How to run.txt
+├── NoteBook/                 # Jupyter notebook: architecture, training, evaluation
+├── Python Scripts/           # Standalone .py: build, train, single-image inference
+└── Using Weight File/        # feature_extraction.py, fine_tuning.py with ImageNet weights
+```
+
+---
+
+## Quick Start
+
+```python
+import tensorflow as tf
+
+model = tf.keras.applications.NASNetMobile(
+    include_top=True,
+    weights="imagenet",
+    input_shape=(224, 224, 3),
+    classes=1000,
+)
+model.summary()
+```
+
+---
+
+## Transfer Learning
+
+```python
+import tensorflow as tf
+
+NUM_CLASSES = 10  # replace with your number of classes
+
+base = tf.keras.applications.NASNetMobile(
+    include_top=False,
+    weights="imagenet",
+    pooling="avg",
+)
+base.trainable = False  # freeze for feature extraction
+
+x = tf.keras.layers.Dense(256, activation="relu")(base.output)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = tf.keras.Model(base.input, output)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+```
+
+---
+
+## Fine-Tuning (Progressive Unfreeze)
+
+```python
+# Step 1: train the head with frozen base (see Transfer Learning above)
+model.fit(train_ds, epochs=5, validation_data=val_ds)
+
+# Step 2: unfreeze the base and fine-tune with a lower learning rate
+base.trainable = True
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-5),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+model.fit(train_ds, epochs=10, validation_data=val_ds)
 ```
 
 ---
@@ -147,9 +141,20 @@ NASNetMobile/
 
 ```bibtex
 @inproceedings{zoph2018learning,
-  title     = {Learning Transferable Architectures for Scalable Image Recognition},
-  author    = {Zoph, Barret and Vasudevan, Vijay and Shlens, Jonathon and Le, Quoc V.},
-  booktitle = {CVPR},
-  year      = {2018}
+  title={Learning Transferable Architectures for Scalable Image Recognition},
+  author={Zoph, Barret and Vasudevan, Vijay and Shlens, Jonathon and Le, Quoc V},
+  booktitle={CVPR},
+  pages={8697--8710},
+  year={2018}
 }
 ```
+
+**Paper:** [Learning Transferable Architectures for Scalable Image Recognition](https://arxiv.org/abs/1707.07012)
+**Authors:** Barret Zoph, Vijay Vasudevan, Jonathon Shlens, Quoc V. Le
+**Venue:** CVPR 2018
+
+---
+
+<div align="center">
+<sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
+</div>

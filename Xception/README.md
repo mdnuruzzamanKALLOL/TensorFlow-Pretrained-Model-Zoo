@@ -1,123 +1,66 @@
-# Xception — Extreme Inception via Depthwise Separable Convolutions
+# Xception — TensorFlow / Keras Pretrained Model | ImageNet Classification
 
-**Paper:** Xception: Deep Learning with Depthwise Separable Convolutions
-**Author:** François Chollet
-**Conference:** CVPR 2017
+> **Keywords:** Xception TensorFlow pretrained 22.9M 299px 79% ImageNet depthwise separable Keras Chollet inception extreme transfer learning classification 2017
+
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)](https://www.tensorflow.org/)
+[![Keras](https://img.shields.io/badge/Keras-Integrated-D00000?style=flat-square&logo=keras&logoColor=white)](https://keras.io/)
+[![ImageNet](https://img.shields.io/badge/Pretrained-ImageNet-4ecdc4?style=flat-square)](https://www.image-net.org/)
+[![License](https://img.shields.io/badge/License-MIT-success?style=flat-square)](../../LICENSE)
 
 ---
 
 ## Overview
 
-Xception (Extreme Inception) is based on the hypothesis that cross-channel correlations
-and spatial correlations in feature maps can be **fully decoupled**. This leads to
-replacing Inception modules entirely with **depthwise separable convolutions** — a
-depthwise spatial convolution (one filter per input channel) followed by a pointwise
-(1×1) convolution.
-
-Xception is built on the same principles as Inception V3 but takes the idea to the
-extreme. The result is a model that achieves better accuracy with fewer parameters.
+Xception (Extreme Inception) replaces all Inception modules with depthwise separable convolutions, achieving 79.0% ImageNet top-1 at 22.9 M parameters — surpassing Inception V3 (77.9%) with fewer parameters. Created by François Chollet (Keras author), it demonstrates that cross-channel and spatial correlations can be fully decoupled.
 
 ---
 
-## Depthwise Separable Convolution
-
-A standard Conv2D(in=32, out=64, 3×3) costs: `32 × 64 × 3 × 3` = 18,432 multiplications per spatial location.
-
-A depthwise separable equivalent:
-- DepthwiseConv2D(32 channels, 3×3): `32 × 3 × 3` = 288 multiplications
-- PointwiseConv2D(32→64, 1×1):  `32 × 64` = 2,048 multiplications
-- **Total: 2,336** — roughly 8× fewer than standard conv
-
----
-
-## Architecture
-
-```
-Input (3 × 299 × 299)
-│
-├── Entry Flow
-│   ├── Conv2D(32, 3×3/2) + BN + ReLU          → 32  × 150×150
-│   ├── Conv2D(64, 3×3/1) + BN + ReLU          → 64  × 150×150
-│   ├── SepBlock(128) [stride-2, residual]       → 128 ×  75×75
-│   ├── SepBlock(256) [stride-2, residual]       → 256 ×  38×38
-│   └── SepBlock(728) [stride-2, residual]       → 728 ×  19×19
-│
-├── Middle Flow (×8)
-│   └── SepBlock(728) [identity residual]        → 728 ×  19×19
-│
-├── Exit Flow
-│   ├── SepBlock(728→1024) [stride-2, residual]  → 1024 × 10×10
-│   ├── SepConv(1536) + ReLU                     → 1536 × 10×10
-│   └── SepConv(2048) + ReLU                     → 2048 × 10×10
-│
-└── GlobalAveragePool → Dense(num_classes, softmax)
-```
-
-Each SepBlock: `[ReLU →] SeparableConv2D → BN → ReLU → SeparableConv2D → BN → MaxPool + residual`
-
----
-
-## Key Stats
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
-| Parameters | ~22.9M |
-| Top-1 (ImageNet) | ~79.0% |
-| Top-5 (ImageNet) | ~94.5% |
-| Input size | 299×299 |
-| Framework | TensorFlow / Keras |
+| **Parameters** | 22.9 M |
+| **Input Resolution** | 299×299 |
+| **ImageNet Top-1** | 79.0% |
+| **ImageNet Top-5** | 94.5% |
+| **Framework** | TensorFlow 2.x / Keras |
+| **TF Class** | `tf.keras.applications.Xception` |
+| **Year** | 2017 |
+| **Venue** | CVPR 2017 |
 
 ---
 
-## Training Configuration (From Scratch)
+## Architecture Highlights
 
-| Setting | Value |
-|---------|-------|
-| Input size | 299×299 |
-| Batch size | 32 |
-| Optimizer | Adam (lr=1e-3) |
-| Scheduler | ReduceLROnPlateau (factor=0.1, patience=5) |
-| Loss | categorical_crossentropy |
-| Epochs | 30 |
+- All inception modules replaced with depthwise separable convolutions
+- Extreme hypothesis: cross-channel and spatial correlations fully decoupled
+- Residual connections between depthwise separable conv blocks
+- Entry/Middle/Exit flow architecture with 36 convolutional layers total
+- 22.9 M parameters outperforming Inception V3 (23.8 M) by 1.1% top-1
 
 ---
 
-## Transfer Learning
+## ImageNet Performance — Xception Family
 
-```python
-from tensorflow import keras
-from tensorflow.keras import layers
-from tensorflow.keras.applications.xception import preprocess_input
+| Model | Params | Input | Top-1 | Top-5 |
+|-------|:------:|:-----:|:-----:|:-----:|
+| Xception | 22.9 M | 299² | 79.0% | 94.5% |
 
-base_model = keras.applications.Xception(
-    weights='imagenet',
-    include_top=False,
-    input_shape=(299, 299, 3),
-)
-x       = layers.GlobalAveragePooling2D()(base_model.output)
-x       = layers.Dropout(0.2)(x)
-outputs = layers.Dense(NUM_CLASSES, activation='softmax')(x)
-model   = keras.Model(inputs=base_model.input, outputs=outputs)
+---
 
-# Preprocessing (important — scales to [-1, 1])
-datagen = keras.preprocessing.image.ImageDataGenerator(
-    preprocessing_function=preprocess_input
-)
-```
+## When to Use Xception
 
-### Two-Phase Fine-Tuning
+Use Xception when working in the 299² input space and you want to outperform Inception V3 with fewer parameters. It is the best performing single 299² model in the TF Keras zoo. For new projects, EfficientNetV2-S at 384² is more accurate.
 
-```python
-# Phase 1 — freeze backbone, train head
-base_model.trainable = False
-model.compile(optimizer=keras.optimizers.Adam(1e-3), ...)
-model.fit(train_gen, epochs=10, ...)
+---
 
-# Phase 2 — unfreeze, fine-tune with lower lr
-base_model.trainable = True
-model.compile(optimizer=keras.optimizers.Adam(1e-5), ...)
-model.fit(train_gen, initial_epoch=10, epochs=30, ...)
-```
+## Real-World Use Cases
+
+- Texture-rich domain classification (art, fabric, satellite imagery)
+- Transfer learning onto datasets where depthwise features generalize well
+- Lightweight alternative to Inception-ResNetV2 at similar resolution (299²)
+- Research studying depthwise separable convolution generalization
+- Image quality assessment (IQA) and perceptual metric computation
 
 ---
 
@@ -125,19 +68,71 @@ model.fit(train_gen, initial_epoch=10, epochs=30, ...)
 
 ```
 Xception/
-├── README.md
-├── NoteBook/
-│   └── xception.ipynb         — 17-cell notebook (arch + train + ROC AUC)
-├── Python Scripts/
-│   ├── xception.py            — build_xception() from scratch
-│   ├── train.py               — training loop (Adam + ReduceLROnPlateau)
-│   ├── inference.py           — top-K single-image prediction
-│   └── How to run.txt
-└── Using Weight File/
-    ├── load_pretrained.py     — load Keras Applications Xception
-    ├── feature_extraction.py  — frozen backbone, head only
-    ├── fine_tuning.py         — two-phase fine-tuning
-    └── How to run.txt
+├── NoteBook/                 # Jupyter notebook: architecture, training, evaluation
+├── Python Scripts/           # Standalone .py: build, train, single-image inference
+└── Using Weight File/        # feature_extraction.py, fine_tuning.py with ImageNet weights
+```
+
+---
+
+## Quick Start
+
+```python
+import tensorflow as tf
+
+model = tf.keras.applications.Xception(
+    include_top=True,
+    weights="imagenet",
+    input_shape=(299, 299, 3),
+    classes=1000,
+)
+model.summary()
+```
+
+---
+
+## Transfer Learning
+
+```python
+import tensorflow as tf
+
+NUM_CLASSES = 10  # replace with your number of classes
+
+base = tf.keras.applications.Xception(
+    include_top=False,
+    weights="imagenet",
+    pooling="avg",
+)
+base.trainable = False  # freeze for feature extraction
+
+x = tf.keras.layers.Dense(256, activation="relu")(base.output)
+x = tf.keras.layers.Dropout(0.3)(x)
+output = tf.keras.layers.Dense(NUM_CLASSES, activation="softmax")(x)
+
+model = tf.keras.Model(base.input, output)
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-3),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+```
+
+---
+
+## Fine-Tuning (Progressive Unfreeze)
+
+```python
+# Step 1: train the head with frozen base (see Transfer Learning above)
+model.fit(train_ds, epochs=5, validation_data=val_ds)
+
+# Step 2: unfreeze the base and fine-tune with a lower learning rate
+base.trainable = True
+model.compile(
+    optimizer=tf.keras.optimizers.Adam(1e-5),
+    loss="categorical_crossentropy",
+    metrics=["accuracy"],
+)
+model.fit(train_ds, epochs=10, validation_data=val_ds)
 ```
 
 ---
@@ -146,9 +141,20 @@ Xception/
 
 ```bibtex
 @inproceedings{chollet2017xception,
-  title     = {Xception: Deep Learning with Depthwise Separable Convolutions},
-  author    = {Chollet, Fran{\c{c}}ois},
-  booktitle = {CVPR},
-  year      = {2017}
+  title={Xception: Deep Learning with Depthwise Separable Convolutions},
+  author={Chollet, Fran\c{c}ois},
+  booktitle={CVPR},
+  pages={1251--1258},
+  year={2017}
 }
 ```
+
+**Paper:** [Xception: Deep Learning with Depthwise Separable Convolutions](https://arxiv.org/abs/1610.02357)
+**Authors:** François Chollet
+**Venue:** CVPR 2017
+
+---
+
+<div align="center">
+<sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
+</div>
