@@ -168,6 +168,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 
 <div align="center">
 
-![Profile Views](https://komarev.com/ghpvc/?username=mdnuruzzamanKALLOL&label=Profile%20Views&color=FF6F00&style=flat-square)
+![Page Views](https://visitor-badge.laobi.icu/badge?page_id=mdnuruzzamanKALLOL.TensorFlow-Pretrained-Model-Zoo.EfficientNetV2L&left_color=%23FF6F00&right_color=%230e75b6&left_text=Page%20Views)
 
 </div>
