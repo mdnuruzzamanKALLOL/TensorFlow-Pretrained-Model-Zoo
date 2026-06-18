@@ -17,6 +17,8 @@ ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of 
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 25.6 M |
@@ -27,6 +29,8 @@ ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of 
 | **TF Class** | `tf.keras.applications.ResNet50V2` |
 | **Year** | 2016 |
 | **Venue** | ECCV 2016 |
+
+</div>
 
 ---
 
@@ -42,6 +46,8 @@ ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of 
 
 ## ImageNet Performance — ResNet Family
 
+<div align="center">
+
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|
 | ResNet50 | 25.6 M | 224² | 74.9% | 92.1% |
@@ -50,6 +56,8 @@ ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of 
 | ResNet101V2 | 44.7 M | 224² | 77.2% | 93.8% |
 | ResNet152 | 60.2 M | 224² | 76.6% | 93.1% |
 | ResNet152V2 | 60.2 M | 224² | 78.0% | 94.2% |
+
+</div>
 
 ---
 
@@ -162,7 +170,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

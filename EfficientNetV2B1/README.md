@@ -17,6 +17,8 @@ EfficientNetV2-B1 scales B0 in depth and resolution to 240², achieving 79.8% Im
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 8.1 M |
@@ -27,6 +29,8 @@ EfficientNetV2-B1 scales B0 in depth and resolution to 240², achieving 79.8% Im
 | **TF Class** | `tf.keras.applications.EfficientNetV2B1` |
 | **Year** | 2021 |
 | **Venue** | ICML 2021 |
+
+</div>
 
 ---
 
@@ -41,6 +45,8 @@ EfficientNetV2-B1 scales B0 in depth and resolution to 240², achieving 79.8% Im
 
 ## ImageNet Performance — EfficientNetV2 Family
 
+<div align="center">
+
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|
 | EfficientNetV2B0 | 7.1 M | 224² | 78.7% | 94.3% |
@@ -50,6 +56,8 @@ EfficientNetV2-B1 scales B0 in depth and resolution to 240², achieving 79.8% Im
 | EfficientNetV2S | 21.5 M | 384² | 83.9% | 96.7% |
 | EfficientNetV2M | 54.1 M | 480² | 85.2% | 97.4% |
 | EfficientNetV2L | 119 M | 480² | 86.8% | 97.9% |
+
+</div>
 
 ---
 
@@ -162,7 +170,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

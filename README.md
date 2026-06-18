@@ -18,6 +18,8 @@
 
 Every model folder contains **three ready-to-run resources**:
 
+<div align="center">
+
 | Asset | Description |
 |-------|-------------|
 | `NoteBook/` | Interactive Jupyter notebook — architecture walkthrough, training & evaluation |
@@ -25,11 +27,15 @@ Every model folder contains **three ready-to-run resources**:
 | `Using Weight File/` | Scripts to load ImageNet weights, feature-extract (frozen) and fine-tune (progressive unfreeze) |
 | `README.md` | Architecture diagram, stage configs, key specs and references |
 
+</div>
+
 ---
 
 ## Model Table
 
 ### ConvNeXt Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -39,7 +45,11 @@ Every model folder contains **three ready-to-run resources**:
 | [ConvNeXtLarge](ConvNeXtLarge/) | 198 M | 224² | [📓](ConvNeXtLarge/NoteBook/) | [🐍](ConvNeXtLarge/Python%20Scripts/) | [⚖️](ConvNeXtLarge/Using%20Weight%20File/) |
 | [ConvNeXtXLarge](ConvNeXtXLarge/) | 350 M | 224² | [📓](ConvNeXtXLarge/NoteBook/) | [🐍](ConvNeXtXLarge/Python%20Scripts/) | [⚖️](ConvNeXtXLarge/Using%20Weight%20File/) |
 
+</div>
+
 ### DenseNet Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -47,7 +57,11 @@ Every model folder contains **three ready-to-run resources**:
 | [DenseNet169](DenseNet169/) | 14 M | 224² | [📓](DenseNet169/NoteBook/) | [🐍](DenseNet169/Python%20Scripts/) | [⚖️](DenseNet169/Using%20Weight%20File/) |
 | [DenseNet201](DenseNet201/) | 20 M | 224² | [📓](DenseNet201/NoteBook/) | [🐍](DenseNet201/Python%20Scripts/) | [⚖️](DenseNet201/Using%20Weight%20File/) |
 
+</div>
+
 ### EfficientNet Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -60,7 +74,11 @@ Every model folder contains **three ready-to-run resources**:
 | [EfficientNetB6](EfficientNetB6/) | 43 M | 528² | [📓](EfficientNetB6/NoteBook/) | [🐍](EfficientNetB6/Python%20Scripts/) | [⚖️](EfficientNetB6/Using%20Weight%20File/) |
 | [EfficientNetB7](EfficientNetB7/) | 66 M | 600² | [📓](EfficientNetB7/NoteBook/) | [🐍](EfficientNetB7/Python%20Scripts/) | [⚖️](EfficientNetB7/Using%20Weight%20File/) |
 
+</div>
+
 ### EfficientNetV2 Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -72,28 +90,44 @@ Every model folder contains **three ready-to-run resources**:
 | [EfficientNetV2M](EfficientNetV2M/) | 54.1 M | 480² | [📓](EfficientNetV2M/NoteBook/) | [🐍](EfficientNetV2M/Python%20Scripts/) | [⚖️](EfficientNetV2M/Using%20Weight%20File/) |
 | [EfficientNetV2L](EfficientNetV2L/) | 119 M | 480² | [📓](EfficientNetV2L/NoteBook/) | [🐍](EfficientNetV2L/Python%20Scripts/) | [⚖️](EfficientNetV2L/Using%20Weight%20File/) |
 
+</div>
+
 ### Inception Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
 | [InceptionV3](InceptionV3/) | 23.8 M | 299² | [📓](InceptionV3/NoteBook/) | [🐍](InceptionV3/Python%20Scripts/) | [⚖️](InceptionV3/Using%20Weight%20File/) |
 | [InceptionResNetV2](InceptionResNetV2/) | 55.8 M | 299² | [📓](InceptionResNetV2/NoteBook/) | [🐍](InceptionResNetV2/Python%20Scripts/) | [⚖️](InceptionResNetV2/Using%20Weight%20File/) |
 
+</div>
+
 ### MobileNet Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
 | [MobileNet](MobileNet/) | 4.2 M | 224² | [📓](MobileNet/NoteBook/) | [🐍](MobileNet/Python%20Scripts/) | [⚖️](MobileNet/Using%20Weight%20File/) |
 | [MobileNetV2](MobileNetV2/) | 3.4 M | 224² | [📓](MobileNetV2/NoteBook/) | [🐍](MobileNetV2/Python%20Scripts/) | [⚖️](MobileNetV2/Using%20Weight%20File/) |
 
+</div>
+
 ### NASNet Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
 | [NASNetMobile](NASNetMobile/) | 5.3 M | 224² | [📓](NASNetMobile/NoteBook/) | [🐍](NASNetMobile/Python%20Scripts/) | [⚖️](NASNetMobile/Using%20Weight%20File/) |
 | [NASNetLarge](NASNetLarge/) | 88.9 M | 331² | [📓](NASNetLarge/NoteBook/) | [🐍](NASNetLarge/Python%20Scripts/) | [⚖️](NASNetLarge/Using%20Weight%20File/) |
 
+</div>
+
 ### ResNet Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -104,18 +138,28 @@ Every model folder contains **three ready-to-run resources**:
 | [ResNet152](ResNet152/) | 60.2 M | 224² | [📓](ResNet152/NoteBook/) | [🐍](ResNet152/Python%20Scripts/) | [⚖️](ResNet152/Using%20Weight%20File/) |
 | [ResNet152V2](ResNet152V2/) | 60.2 M | 224² | [📓](ResNet152V2/NoteBook/) | [🐍](ResNet152V2/Python%20Scripts/) | [⚖️](ResNet152V2/Using%20Weight%20File/) |
 
+</div>
+
 ### VGG Family
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
 | [VGG16](VGG16/) | 138 M | 224² | [📓](VGG16/NoteBook/) | [🐍](VGG16/Python%20Scripts/) | [⚖️](VGG16/Using%20Weight%20File/) |
 | [VGG19](VGG19/) | 143.7 M | 224² | [📓](VGG19/NoteBook/) | [🐍](VGG19/Python%20Scripts/) | [⚖️](VGG19/Using%20Weight%20File/) |
 
+</div>
+
 ### Xception
+
+<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
 | [Xception](Xception/) | 22.9 M | 299² | [📓](Xception/NoteBook/) | [🐍](Xception/Python%20Scripts/) | [⚖️](Xception/Using%20Weight%20File/) |
+
+</div>
 
 ---
 
@@ -146,6 +190,8 @@ python feature_extraction.py
 
 ## Families at a Glance
 
+<div align="center">
+
 | Family | Models | Best Use |
 |--------|:------:|----------|
 | **ConvNeXt** | 5 | Modern CNN, top accuracy, ViT-competitive |
@@ -158,6 +204,8 @@ python feature_extraction.py
 | **NASNet** | 2 | NAS-designed, high accuracy |
 | **VGG** | 2 | Simple baseline, style transfer |
 | **Xception** | 1 | Depthwise separable, Inception evolution |
+
+</div>
 
 ---
 

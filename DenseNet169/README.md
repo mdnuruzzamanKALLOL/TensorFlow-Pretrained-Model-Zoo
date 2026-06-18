@@ -17,6 +17,8 @@ DenseNet-169 extends DenseNet-121 with a deeper final dense block (32 layers vs 
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 14 M |
@@ -27,6 +29,8 @@ DenseNet-169 extends DenseNet-121 with a deeper final dense block (32 layers vs 
 | **TF Class** | `tf.keras.applications.DenseNet169` |
 | **Year** | 2017 |
 | **Venue** | CVPR 2017 |
+
+</div>
 
 ---
 
@@ -42,11 +46,15 @@ DenseNet-169 extends DenseNet-121 with a deeper final dense block (32 layers vs 
 
 ## ImageNet Performance — DenseNet Family
 
+<div align="center">
+
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|
 | DenseNet121 | 8 M | 224² | 75.0% | 92.2% |
 | DenseNet169 | 14 M | 224² | 76.2% | 93.2% |
 | DenseNet201 | 20 M | 224² | 77.3% | 93.6% |
+
+</div>
 
 ---
 
@@ -160,7 +168,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

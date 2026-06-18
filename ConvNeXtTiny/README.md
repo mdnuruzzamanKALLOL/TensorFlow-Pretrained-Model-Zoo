@@ -17,6 +17,8 @@ ConvNeXt Tiny is a modernized pure-convolutional network from Facebook AI Resear
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 28 M |
@@ -27,6 +29,8 @@ ConvNeXt Tiny is a modernized pure-convolutional network from Facebook AI Resear
 | **TF Class** | `tf.keras.applications.ConvNeXtTiny` |
 | **Year** | 2022 |
 | **Venue** | CVPR 2022 |
+
+</div>
 
 ---
 
@@ -42,6 +46,8 @@ ConvNeXt Tiny is a modernized pure-convolutional network from Facebook AI Resear
 
 ## ImageNet Performance — ConvNeXt Family
 
+<div align="center">
+
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|
 | ConvNeXtTiny | 28 M | 224² | 81.3% | 95.6% |
@@ -49,6 +55,8 @@ ConvNeXt Tiny is a modernized pure-convolutional network from Facebook AI Resear
 | ConvNeXtBase | 89 M | 224² | 83.8% | 96.7% |
 | ConvNeXtLarge | 198 M | 224² | 84.3% | 96.9% |
 | ConvNeXtXLarge | 350 M | 224² | 85.4% | 97.4% |
+
+</div>
 
 ---
 
@@ -162,7 +170,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

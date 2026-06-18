@@ -17,6 +17,8 @@ Xception (Extreme Inception) replaces all Inception modules with depthwise separ
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 22.9 M |
@@ -27,6 +29,8 @@ Xception (Extreme Inception) replaces all Inception modules with depthwise separ
 | **TF Class** | `tf.keras.applications.Xception` |
 | **Year** | 2017 |
 | **Venue** | CVPR 2017 |
+
+</div>
 
 ---
 
@@ -42,9 +46,13 @@ Xception (Extreme Inception) replaces all Inception modules with depthwise separ
 
 ## ImageNet Performance — Xception Family
 
+<div align="center">
+
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|
 | Xception | 22.9 M | 299² | 79.0% | 94.5% |
+
+</div>
 
 ---
 
@@ -158,7 +166,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

@@ -17,6 +17,8 @@ VGG-19 extends VGG-16 with three additional convolutional layers (16 conv layers
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 143.7 M |
@@ -27,6 +29,8 @@ VGG-19 extends VGG-16 with three additional convolutional layers (16 conv layers
 | **TF Class** | `tf.keras.applications.VGG19` |
 | **Year** | 2014 |
 | **Venue** | ICLR 2015 |
+
+</div>
 
 ---
 
@@ -42,10 +46,14 @@ VGG-19 extends VGG-16 with three additional convolutional layers (16 conv layers
 
 ## ImageNet Performance — VGG Family
 
+<div align="center">
+
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|
 | VGG16 | 138 M | 224² | 71.3% | 90.1% |
 | VGG19 | 143.7 M | 224² | 71.3% | 90.0% |
+
+</div>
 
 ---
 
@@ -158,7 +166,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

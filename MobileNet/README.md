@@ -17,6 +17,8 @@ MobileNet V1 introduced depthwise separable convolutions to dramatically reduce 
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 4.2 M |
@@ -27,6 +29,8 @@ MobileNet V1 introduced depthwise separable convolutions to dramatically reduce 
 | **TF Class** | `tf.keras.applications.MobileNet` |
 | **Year** | 2017 |
 | **Venue** | arXiv 2017 |
+
+</div>
 
 ---
 
@@ -42,10 +46,14 @@ MobileNet V1 introduced depthwise separable convolutions to dramatically reduce 
 
 ## ImageNet Performance — MobileNet Family
 
+<div align="center">
+
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|
 | MobileNet | 4.2 M | 224² | 70.4% | 89.5% |
 | MobileNetV2 | 3.4 M | 224² | 71.3% | 90.1% |
+
+</div>
 
 ---
 
@@ -158,7 +166,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

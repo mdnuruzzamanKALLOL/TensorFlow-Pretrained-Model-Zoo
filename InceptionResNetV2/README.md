@@ -17,6 +17,8 @@ Inception-ResNet V2 combines the multi-scale feature extraction of Inception mod
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 55.8 M |
@@ -27,6 +29,8 @@ Inception-ResNet V2 combines the multi-scale feature extraction of Inception mod
 | **TF Class** | `tf.keras.applications.InceptionResNetV2` |
 | **Year** | 2017 |
 | **Venue** | AAAI 2017 |
+
+</div>
 
 ---
 
@@ -42,10 +46,14 @@ Inception-ResNet V2 combines the multi-scale feature extraction of Inception mod
 
 ## ImageNet Performance — Inception Family
 
+<div align="center">
+
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|
 | InceptionV3 | 23.8 M | 299² | 77.9% | 93.7% |
 | InceptionResNetV2 | 55.8 M | 299² | 80.1% | 95.3% |
+
+</div>
 
 ---
 
@@ -159,7 +167,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

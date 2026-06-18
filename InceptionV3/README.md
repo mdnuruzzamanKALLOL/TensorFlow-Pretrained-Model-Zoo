@@ -17,6 +17,8 @@ Inception V3 modernizes the original GoogLeNet by introducing factorized convolu
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 23.8 M |
@@ -27,6 +29,8 @@ Inception V3 modernizes the original GoogLeNet by introducing factorized convolu
 | **TF Class** | `tf.keras.applications.InceptionV3` |
 | **Year** | 2016 |
 | **Venue** | CVPR 2016 |
+
+</div>
 
 ---
 
@@ -42,10 +46,14 @@ Inception V3 modernizes the original GoogLeNet by introducing factorized convolu
 
 ## ImageNet Performance — Inception Family
 
+<div align="center">
+
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|
 | InceptionV3 | 23.8 M | 299² | 77.9% | 93.7% |
 | InceptionResNetV2 | 55.8 M | 299² | 80.1% | 95.3% |
+
+</div>
 
 ---
 
@@ -159,7 +167,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

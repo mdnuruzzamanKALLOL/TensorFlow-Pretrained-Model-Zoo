@@ -17,6 +17,8 @@ NASNet Mobile is a cell-based architecture discovered by Neural Architecture Sea
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 5.3 M |
@@ -27,6 +29,8 @@ NASNet Mobile is a cell-based architecture discovered by Neural Architecture Sea
 | **TF Class** | `tf.keras.applications.NASNetMobile` |
 | **Year** | 2018 |
 | **Venue** | CVPR 2018 |
+
+</div>
 
 ---
 
@@ -42,10 +46,14 @@ NASNet Mobile is a cell-based architecture discovered by Neural Architecture Sea
 
 ## ImageNet Performance — NASNet Family
 
+<div align="center">
+
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|
 | NASNetMobile | 5.3 M | 224² | 74.4% | 91.9% |
 | NASNetLarge | 88.9 M | 331² | 82.7% | 96.2% |
+
+</div>
 
 ---
 
@@ -158,7 +166,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 

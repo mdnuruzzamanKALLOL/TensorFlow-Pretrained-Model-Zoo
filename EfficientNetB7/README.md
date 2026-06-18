@@ -17,6 +17,8 @@ EfficientNet-B7 is the largest and most accurate original EfficientNet, achievin
 
 ## Model Specifications
 
+<div align="center">
+
 | Property | Value |
 |----------|-------|
 | **Parameters** | 66 M |
@@ -27,6 +29,8 @@ EfficientNet-B7 is the largest and most accurate original EfficientNet, achievin
 | **TF Class** | `tf.keras.applications.EfficientNetB7` |
 | **Year** | 2019 |
 | **Venue** | ICML 2019 |
+
+</div>
 
 ---
 
@@ -42,6 +46,8 @@ EfficientNet-B7 is the largest and most accurate original EfficientNet, achievin
 
 ## ImageNet Performance — EfficientNet Family
 
+<div align="center">
+
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|
 | EfficientNetB0 | 5.3 M | 224² | 77.1% | 93.3% |
@@ -52,6 +58,8 @@ EfficientNet-B7 is the largest and most accurate original EfficientNet, achievin
 | EfficientNetB5 | 30 M | 456² | 83.6% | 96.7% |
 | EfficientNetB6 | 43 M | 528² | 84.0% | 96.9% |
 | EfficientNetB7 | 66 M | 600² | 84.3% | 97.0% |
+
+</div>
 
 ---
 
@@ -164,7 +172,6 @@ model.fit(train_ds, epochs=10, validation_data=val_ds)
 <div align="center">
 <sub>Part of the <a href="../README.md">TensorFlow Pretrained Model Zoo</a> — 38 models, 10 families, ready-to-run notebooks and scripts</sub>
 </div>
-
 
 ---
 
