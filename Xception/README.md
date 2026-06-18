@@ -15,9 +15,9 @@ Xception (Extreme Inception) replaces all Inception modules with depthwise separ
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ Xception (Extreme Inception) replaces all Inception modules with depthwise separ
 
 ---
 
-## ImageNet Performance — Xception Family
-
 <div align="center">
+
+## ImageNet Performance — Xception Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

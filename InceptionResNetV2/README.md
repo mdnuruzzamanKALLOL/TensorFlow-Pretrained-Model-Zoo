@@ -15,9 +15,9 @@ Inception-ResNet V2 combines the multi-scale feature extraction of Inception mod
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ Inception-ResNet V2 combines the multi-scale feature extraction of Inception mod
 
 ---
 
-## ImageNet Performance — Inception Family
-
 <div align="center">
+
+## ImageNet Performance — Inception Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

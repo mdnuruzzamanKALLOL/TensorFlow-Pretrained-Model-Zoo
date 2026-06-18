@@ -15,9 +15,9 @@ MobileNetV2 introduces Inverted Residual blocks with Linear Bottlenecks, achievi
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ MobileNetV2 introduces Inverted Residual blocks with Linear Bottlenecks, achievi
 
 ---
 
-## ImageNet Performance — MobileNet Family
-
 <div align="center">
+
+## ImageNet Performance — MobileNet Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

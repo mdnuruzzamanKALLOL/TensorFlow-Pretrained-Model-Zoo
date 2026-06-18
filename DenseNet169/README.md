@@ -15,9 +15,9 @@ DenseNet-169 extends DenseNet-121 with a deeper final dense block (32 layers vs 
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ DenseNet-169 extends DenseNet-121 with a deeper final dense block (32 layers vs 
 
 ---
 
-## ImageNet Performance — DenseNet Family
-
 <div align="center">
+
+## ImageNet Performance — DenseNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

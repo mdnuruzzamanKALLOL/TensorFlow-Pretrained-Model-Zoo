@@ -31,11 +31,10 @@ Every model folder contains **three ready-to-run resources**:
 
 ---
 
-## Model Table
+<h2 align="center">Model Table</h2>
+<div align="center">
 
 ### ConvNeXt Family
-
-<div align="center">
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -47,9 +46,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### DenseNet Family
-
 <div align="center">
+
+### DenseNet Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -59,9 +58,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### EfficientNet Family
-
 <div align="center">
+
+### EfficientNet Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -76,9 +75,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### EfficientNetV2 Family
-
 <div align="center">
+
+### EfficientNetV2 Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -92,9 +91,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### Inception Family
-
 <div align="center">
+
+### Inception Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -103,9 +102,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### MobileNet Family
-
 <div align="center">
+
+### MobileNet Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -114,9 +113,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### NASNet Family
-
 <div align="center">
+
+### NASNet Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -125,9 +124,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### ResNet Family
-
 <div align="center">
+
+### ResNet Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -140,9 +139,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### VGG Family
-
 <div align="center">
+
+### VGG Family
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -151,9 +150,9 @@ Every model folder contains **three ready-to-run resources**:
 
 </div>
 
-### Xception
-
 <div align="center">
+
+### Xception
 
 | Model | Params | Input | Notebook | Script | Weights |
 |:------|:------:|:-----:|:--------:|:------:|:-------:|
@@ -188,9 +187,9 @@ python feature_extraction.py
 
 ---
 
-## Families at a Glance
-
 <div align="center">
+
+## Families at a Glance
 
 | Family | Models | Best Use |
 |--------|:------:|----------|

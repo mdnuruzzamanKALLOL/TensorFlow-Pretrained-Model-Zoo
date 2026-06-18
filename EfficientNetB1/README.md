@@ -15,9 +15,9 @@ EfficientNet-B1 compounds B0 by scaling depth × 1.1, width × 1.1, resolution t
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNet-B1 compounds B0 by scaling depth × 1.1, width × 1.1, resolution t
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

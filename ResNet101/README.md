@@ -15,9 +15,9 @@ ResNet-101 doubles ResNet-50's stage-3 block count from 6 to 23, reaching 44.7 M
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ResNet-101 doubles ResNet-50's stage-3 block count from 6 to 23, reaching 44.7 M
 
 ---
 
-## ImageNet Performance — ResNet Family
-
 <div align="center">
+
+## ImageNet Performance — ResNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

@@ -15,9 +15,9 @@ ConvNeXt XLarge is the largest variant in the ConvNeXt family at 350 M parameter
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ConvNeXt XLarge is the largest variant in the ConvNeXt family at 350 M parameter
 
 ---
 
-## ImageNet Performance — ConvNeXt Family
-
 <div align="center">
+
+## ImageNet Performance — ConvNeXt Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

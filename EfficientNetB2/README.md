@@ -15,9 +15,9 @@ EfficientNet-B2 is the first EfficientNet variant to cross 80% ImageNet top-1 ac
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNet-B2 is the first EfficientNet variant to cross 80% ImageNet top-1 ac
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

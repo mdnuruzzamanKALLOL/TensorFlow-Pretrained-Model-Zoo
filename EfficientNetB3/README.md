@@ -15,9 +15,9 @@ EfficientNet-B3 reaches 81.6% ImageNet top-1 with 12 M parameters at 300² input
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNet-B3 reaches 81.6% ImageNet top-1 with 12 M parameters at 300² input
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

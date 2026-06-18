@@ -15,9 +15,9 @@ VGG-16 uses a uniform architecture of 3×3 convolutions stacked in 13 convolutio
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ VGG-16 uses a uniform architecture of 3×3 convolutions stacked in 13 convolutio
 
 ---
 
-## ImageNet Performance — VGG Family
-
 <div align="center">
+
+## ImageNet Performance — VGG Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

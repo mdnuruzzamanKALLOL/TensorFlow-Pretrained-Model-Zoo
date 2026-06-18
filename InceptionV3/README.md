@@ -15,9 +15,9 @@ Inception V3 modernizes the original GoogLeNet by introducing factorized convolu
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ Inception V3 modernizes the original GoogLeNet by introducing factorized convolu
 
 ---
 
-## ImageNet Performance — Inception Family
-
 <div align="center">
+
+## ImageNet Performance — Inception Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

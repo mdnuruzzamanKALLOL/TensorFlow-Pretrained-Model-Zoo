@@ -15,9 +15,9 @@ NASNet Large uses the same NAS-discovered cell design as NASNetMobile but scaled
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ NASNet Large uses the same NAS-discovered cell design as NASNetMobile but scaled
 
 ---
 
-## ImageNet Performance — NASNet Family
-
 <div align="center">
+
+## ImageNet Performance — NASNet Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

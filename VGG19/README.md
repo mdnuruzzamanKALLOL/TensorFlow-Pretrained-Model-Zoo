@@ -15,9 +15,9 @@ VGG-19 extends VGG-16 with three additional convolutional layers (16 conv layers
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ VGG-19 extends VGG-16 with three additional convolutional layers (16 conv layers
 
 ---
 
-## ImageNet Performance — VGG Family
-
 <div align="center">
+
+## ImageNet Performance — VGG Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

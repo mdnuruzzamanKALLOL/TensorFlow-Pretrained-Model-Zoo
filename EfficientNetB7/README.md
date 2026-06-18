@@ -15,9 +15,9 @@ EfficientNet-B7 is the largest and most accurate original EfficientNet, achievin
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNet-B7 is the largest and most accurate original EfficientNet, achievin
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

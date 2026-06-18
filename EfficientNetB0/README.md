@@ -15,9 +15,9 @@ EfficientNet-B0 is the baseline model discovered by Neural Architecture Search (
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNet-B0 is the baseline model discovered by Neural Architecture Search (
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

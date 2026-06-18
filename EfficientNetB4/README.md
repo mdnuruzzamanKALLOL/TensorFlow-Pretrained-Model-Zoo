@@ -15,9 +15,9 @@ EfficientNet-B4 achieves 82.9% ImageNet top-1 at 380² input with 19 M parameter
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNet-B4 achieves 82.9% ImageNet top-1 at 380² input with 19 M parameter
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

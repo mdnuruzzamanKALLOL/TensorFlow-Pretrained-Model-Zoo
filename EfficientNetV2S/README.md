@@ -15,9 +15,9 @@ EfficientNetV2-S is the first large-scale V2 variant, achieving 83.9% ImageNet t
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNetV2-S is the first large-scale V2 variant, achieving 83.9% ImageNet t
 
 ---
 
-## ImageNet Performance — EfficientNetV2 Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNetV2 Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

@@ -15,9 +15,9 @@ EfficientNet-B5 achieves 83.6% ImageNet top-1 at 456² resolution with 30 M para
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -43,9 +43,9 @@ EfficientNet-B5 achieves 83.6% ImageNet top-1 at 456² resolution with 30 M para
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

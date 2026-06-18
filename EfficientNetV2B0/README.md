@@ -15,9 +15,9 @@ EfficientNetV2-B0 combines Fused-MBConv blocks in early stages with MBConv+SE in
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNetV2-B0 combines Fused-MBConv blocks in early stages with MBConv+SE in
 
 ---
 
-## ImageNet Performance — EfficientNetV2 Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNetV2 Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

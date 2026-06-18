@@ -15,9 +15,9 @@ MobileNet V1 introduced depthwise separable convolutions to dramatically reduce 
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ MobileNet V1 introduced depthwise separable convolutions to dramatically reduce 
 
 ---
 
-## ImageNet Performance — MobileNet Family
-
 <div align="center">
+
+## ImageNet Performance — MobileNet Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

@@ -15,9 +15,9 @@ ConvNeXt Base delivers 83.8% ImageNet top-1 accuracy with 89 M parameters, match
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ConvNeXt Base delivers 83.8% ImageNet top-1 accuracy with 89 M parameters, match
 
 ---
 
-## ImageNet Performance — ConvNeXt Family
-
 <div align="center">
+
+## ImageNet Performance — ConvNeXt Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

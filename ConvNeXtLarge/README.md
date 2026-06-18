@@ -15,9 +15,9 @@ ConvNeXt Large pushes CNN accuracy to 84.3% on ImageNet-1K with 198 M parameters
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ConvNeXt Large pushes CNN accuracy to 84.3% on ImageNet-1K with 198 M parameters
 
 ---
 
-## ImageNet Performance — ConvNeXt Family
-
 <div align="center">
+
+## ImageNet Performance — ConvNeXt Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

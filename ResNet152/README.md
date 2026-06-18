@@ -15,9 +15,9 @@ ResNet-152 is the deepest standard ResNet at 60.2 M parameters, with stage confi
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ResNet-152 is the deepest standard ResNet at 60.2 M parameters, with stage confi
 
 ---
 
-## ImageNet Performance — ResNet Family
-
 <div align="center">
+
+## ImageNet Performance — ResNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

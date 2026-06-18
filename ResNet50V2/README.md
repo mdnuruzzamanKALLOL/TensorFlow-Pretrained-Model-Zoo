@@ -15,9 +15,9 @@ ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of 
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ResNet-50 V2 reorders operations to pre-activation (BN→ReLU→Conv instead of 
 
 ---
 
-## ImageNet Performance — ResNet Family
-
 <div align="center">
+
+## ImageNet Performance — ResNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

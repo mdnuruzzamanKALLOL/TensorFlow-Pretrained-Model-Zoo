@@ -15,9 +15,9 @@ EfficientNetV2-M delivers 85.2% ImageNet top-1 at 54.1 M parameters and 480² in
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ EfficientNetV2-M delivers 85.2% ImageNet top-1 at 54.1 M parameters and 480² in
 
 ---
 
-## ImageNet Performance — EfficientNetV2 Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNetV2 Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

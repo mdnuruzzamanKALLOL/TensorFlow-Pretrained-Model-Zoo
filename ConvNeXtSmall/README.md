@@ -15,9 +15,9 @@ ConvNeXt Small is the second-tier variant of the ConvNeXt family, offering 83.1%
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ConvNeXt Small is the second-tier variant of the ConvNeXt family, offering 83.1%
 
 ---
 
-## ImageNet Performance — ConvNeXt Family
-
 <div align="center">
+
+## ImageNet Performance — ConvNeXt Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

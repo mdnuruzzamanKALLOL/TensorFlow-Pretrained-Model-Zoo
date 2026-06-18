@@ -15,9 +15,9 @@ DenseNet-121 connects each layer to every subsequent layer in a feed-forward fas
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ DenseNet-121 connects each layer to every subsequent layer in a feed-forward fas
 
 ---
 
-## ImageNet Performance — DenseNet Family
-
 <div align="center">
+
+## ImageNet Performance — DenseNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

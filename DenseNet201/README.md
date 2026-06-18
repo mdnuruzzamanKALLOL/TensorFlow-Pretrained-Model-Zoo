@@ -15,9 +15,9 @@ DenseNet-201 is the largest standard DenseNet variant at 20 M parameters with 20
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ DenseNet-201 is the largest standard DenseNet variant at 20 M parameters with 20
 
 ---
 
-## ImageNet Performance — DenseNet Family
-
 <div align="center">
+
+## ImageNet Performance — DenseNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

@@ -15,9 +15,9 @@ NASNet Mobile is a cell-based architecture discovered by Neural Architecture Sea
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ NASNet Mobile is a cell-based architecture discovered by Neural Architecture Sea
 
 ---
 
-## ImageNet Performance — NASNet Family
-
 <div align="center">
+
+## ImageNet Performance — NASNet Family
 
 | Model | Params | Input | Top-1 | Top-5 |
 |-------|:------:|:-----:|:-----:|:-----:|

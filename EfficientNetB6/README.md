@@ -15,9 +15,9 @@ EfficientNet-B6 reaches 84.0% ImageNet top-1 with 43 M parameters at 528² input
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -43,9 +43,9 @@ EfficientNet-B6 reaches 84.0% ImageNet top-1 with 43 M parameters at 528² input
 
 ---
 
-## ImageNet Performance — EfficientNet Family
-
 <div align="center">
+
+## ImageNet Performance — EfficientNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

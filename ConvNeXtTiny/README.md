@@ -15,9 +15,9 @@ ConvNeXt Tiny is a modernized pure-convolutional network from Facebook AI Resear
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -44,9 +44,9 @@ ConvNeXt Tiny is a modernized pure-convolutional network from Facebook AI Resear
 
 ---
 
-## ImageNet Performance — ConvNeXt Family
-
 <div align="center">
+
+## ImageNet Performance — ConvNeXt Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|

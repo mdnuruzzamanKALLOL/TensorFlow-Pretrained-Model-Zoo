@@ -15,9 +15,9 @@ ResNet-101 V2 applies the pre-activation formulation to the 101-layer architectu
 
 ---
 
-## Model Specifications
-
 <div align="center">
+
+## Model Specifications
 
 | Property | Value |
 |----------|-------|
@@ -43,9 +43,9 @@ ResNet-101 V2 applies the pre-activation formulation to the 101-layer architectu
 
 ---
 
-## ImageNet Performance — ResNet Family
-
 <div align="center">
+
+## ImageNet Performance — ResNet Family
 
 | Variant | Params | Input | Top-1 | Top-5 |
 |---------|:------:|:-----:|:-----:|:-----:|
